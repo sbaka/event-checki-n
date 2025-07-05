@@ -52,7 +52,7 @@ dependencies:
   
   # Networking
   dio: ^5.3.2
-  connectivity_plus: ^4.0.2
+  connectivity_plus: ^6.1.4
   
   # Local Storage
   hive: ^2.2.3
@@ -61,7 +61,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   
   # QR Code Scanning
-  mobile_scanner: ^3.4.1
+  mobile_scanner: ^7.0.1
   
   # Utilities
   intl: ^0.18.1
