@@ -1,0 +1,188 @@
+# Comprehensive Flutter Event Check-in App Development Prompt
+
+## Project Overview
+
+Create a professional-grade event check-in application using Flutter that enables event staff to efficiently verify attendees via QR code scanning. The app must function reliably both online and offline, provide real-time check-in statistics, and offer a smooth, intuitive user experience for event staff.
+
+## Technical Requirements
+
+### Core Architecture
+- Implement **Clean Architecture** with strict separation of concerns:
+  - Domain layer (entities, use cases, repository interfaces)
+  - Data layer (API clients, local storage, repository implementations)
+  - Presentation layer (UI components, state management)
+- Use **feature-first** folder structure to ensure scalability
+- Implement **dependency injection** using get_it for service locator pattern
+
+### State Management & Code Generation
+- Utilize **Bloc pattern** with flutter_bloc for predictable state management
+- Implement **freezed** for immutable state objects and union types
+- Use **json_serializable** for API models
+- Implement **auto_route** for type-safe routing
+- Utilize **injectable** for dependency injection code generation
+
+### Data Persistence
+- Implement **Hive** for offline-first data storage
+- Create robust data synchronization mechanism with conflict resolution
+- Use **drift** (formerly moor) for more complex relational data needs
+- Implement secure storage for authentication tokens
+
+### QR Code Scanning
+- Integrate **mobile_scanner** for high-performance QR scanning
+- Implement custom overlay UI for scanning experience
+- Create batch scanning capability for group check-ins
+- Include manual entry fallback option
+
+### Networking
+- Create robust API client with **dio** including:
+  - Retry logic
+  - Connectivity monitoring
+  - Request caching
+  - Token refresh handling
+- Implement proper error handling with user-friendly messages
+
+### UI/UX Requirements
+- Design a clean, modern interface following Material Design 3 guidelines
+- Create responsive layouts that work on both phones and tablets
+- Implement dark mode support
+- Ensure accessibility compliance (proper contrast, semantic labels)
+- Create smooth transitions and loading states
+- Implement offline mode visual indicators
+
+## Core Features to Implement
+
+1. **Authentication System**
+   - Staff login with email/password
+   - Biometric authentication option
+   - Session management
+   - Role-based access control
+
+2. **Event Management**
+   - List of assigned events for staff member
+   - Event details view with key information
+   - Support for multiple concurrent events
+   - Event status indicators (upcoming, active, completed)
+
+3. **Attendee Check-in**
+   - High-performance QR code scanner
+   - Attendee verification display
+   - Quick check-in confirmation
+   - Check-in history log
+   - Offline check-in capabilities
+   - Manual search and check-in option
+
+4. **Real-time Analytics**
+   - Current check-in count
+   - Check-in rate (per hour)
+   - Expected vs. actual attendance
+   - Category breakdown (VIP, regular, etc.)
+   - Visual progress indicators
+
+5. **Synchronization System**
+   - Background sync when connection is available
+   - Conflict resolution for offline check-ins
+   - Sync status indicators
+   - Forced sync option
+   - Sync history and error reporting
+
+## Implementation Specifications
+
+### Code Quality Requirements
+- Maintain minimum 80% test coverage across all layers
+- Implement unit tests for business logic
+- Create widget tests for UI components
+- Develop integration tests for critical flows
+- Set up static code analysis with very_good_analysis
+- Follow consistent code style with effective_dart
+- Document all public APIs and complex logic
+
+### Performance Requirements
+- App startup time under 2 seconds on mid-range devices
+- QR code detection under 1 second
+- Smooth scrolling at 60fps in all list views
+- Efficient battery usage (optimize camera usage)
+- Memory footprint under 150MB in normal operation
+- Support for processing at least 5 check-ins per minute per device
+
+## Success Metrics
+
+The implementation will be considered successful when:
+
+1. **Functional Completeness**
+   - 100% of core features implemented
+   - All acceptance criteria for each feature met
+   - Edge cases properly handled (offline mode, error states)
+
+2. **Performance Benchmarks**
+   - QR scanning success rate above 98% in various lighting conditions
+   - Check-in process completes in under 3 seconds end-to-end
+   - App remains responsive with 10,000+ attendee database
+   - Battery consumption allows for 8+ hours of active usage
+   - All animations and transitions maintain 60fps
+
+3. **Code Quality**
+   - Clean architecture principles strictly followed
+   - All layers properly tested with 80%+ coverage
+   - No critical or high-severity linting issues
+   - Successful static analysis with zero errors
+   - Documentation complete for all public APIs
+
+4. **User Experience**
+   - Staff can be trained in under 15 minutes
+   - Error states are clear and actionable
+   - Offline mode transitions are seamless to users
+   - Navigation requires maximum 3 taps for any common action
+   - UI remains usable on various screen sizes
+
+## Deliverables
+
+1. Complete source code with proper documentation
+2. Automated test suite with CI integration
+3. Build configuration for development, staging, and production
+4. User manual for staff training
+5. Architecture documentation explaining key decisions
+6. Performance and security analysis report
+
+## Development Constraints
+
+- Target platforms: Android 7.0+ and iOS 13.0+
+- Optimize for tablet usage but ensure phone compatibility
+- Ensure compatibility with at least 3 common event management APIs
+- Prioritize offline functionality and reliability over feature richness
+- Focus on staff experience; attendee-facing features will be added later
+
+## Technical Stack Reference
+
+```
+sdk: flutter >=3.10.0
+dependencies:
+  flutter_bloc: ^8.1.3
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  get_it: ^7.6.0
+  injectable: ^2.3.0
+  auto_route: ^7.8.3
+  dio: ^5.3.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  drift: ^2.12.1
+  mobile_scanner: ^3.4.1
+  connectivity_plus: ^4.0.2
+  equatable: ^2.0.5
+  flutter_secure_storage: ^8.0.0
+  intl: ^0.18.1
+  
+dev_dependencies:
+  build_runner: ^2.4.6
+  freezed: ^2.4.1
+  json_serializable: ^6.7.1
+  injectable_generator: ^2.4.0
+  auto_route_generator: ^7.3.1
+  drift_dev: ^2.12.1
+  hive_generator: ^2.0.0
+  flutter_test: 
+  flutter_lints: ^2.0.2
+  mockito: ^5.4.2
+  bloc_test: ^9.1.4
+  very_good_analysis: ^5.1.0
+```
