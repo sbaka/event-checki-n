@@ -36,6 +36,7 @@ class EventCheckInApp extends StatelessWidget {
       title: 'Event Check-In',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      // ignore: avoid_redundant_argument_values
       themeMode: ThemeMode.system,
       routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: false,

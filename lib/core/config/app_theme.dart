@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static const _primaryColor = Color(0xFF6750A4);
@@ -29,6 +30,7 @@ class AppTheme {
       surface: Colors.white,
       onSurface: Colors.black,
     ),
+    textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme),
     fontFamily: 'Poppins',
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
@@ -133,6 +135,7 @@ class AppTheme {
       surface: const Color(0xFF1E1E1E),
       onSurface: Colors.white,
     ),
+    textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
     fontFamily: 'Poppins',
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF1E1E1E),

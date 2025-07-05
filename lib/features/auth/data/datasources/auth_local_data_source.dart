@@ -19,10 +19,11 @@ abstract class AuthLocalDataSource {
 
 @Injectable(as: AuthLocalDataSource)
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
-  final SecureStorage _secureStorage;
   static const String _userKey = 'user';
   static const String _tokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
+
+  final SecureStorage _secureStorage;
 
   AuthLocalDataSourceImpl(this._secureStorage);
 
@@ -72,7 +73,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<String?> getToken() async {
     try {
-      return await _secureStorage.getSecureData(_tokenKey);
+      return _secureStorage.getSecureData(_tokenKey);
     } catch (e) {
       throw CacheException(message: 'Failed to get token');
     }
@@ -99,7 +100,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<String?> getRefreshToken() async {
     try {
-      return await _secureStorage.getSecureData(_refreshTokenKey);
+      return _secureStorage.getSecureData(_refreshTokenKey);
     } catch (e) {
       throw CacheException(message: 'Failed to get refresh token');
     }

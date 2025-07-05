@@ -4,20 +4,22 @@ import 'package:event_check_in/core/errors/failures.dart';
 import 'package:event_check_in/core/network/connectivity_service.dart';
 import 'package:event_check_in/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:event_check_in/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:event_check_in/features/auth/data/models/user_model.dart';
 import 'package:event_check_in/features/auth/domain/entities/user.dart';
 import 'package:event_check_in/features/auth/domain/repositories/auth_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource _remoteDataSource;
+  final AuthLocalDataSource _localDataSource;
+  final ConnectivityService _connectivityService;
+
   AuthRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
     this._connectivityService,
   );
-  final AuthRemoteDataSource _remoteDataSource;
-  final AuthLocalDataSource _localDataSource;
-  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, User>> login({
@@ -114,7 +116,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isAuthenticated() async {
     try {
-      return await _localDataSource.hasToken();
+      return _localDataSource.hasToken();
     } catch (e) {
       return false;
     }

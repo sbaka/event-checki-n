@@ -17,18 +17,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._loginUseCase,
     this._logoutUseCase,
   ) : super(const AuthState.initial()) {
-    on<AuthEvent>((event, emit) async {
-      await event.map(
-        checkAuthStatus: (e) => _checkAuthStatus(e, emit),
-        login: (e) => _login(e, emit),
-        logout: (e) => _logout(e, emit),
-        updateProfile: (e) => _updateProfile(e, emit),
+    on<AuthEvent>((event, emit) {
+      event.map(
+        checkAuthStatus: (_) => _checkAuthStatus(emit),
+        login: (e) => _login(e.email, e.password, emit),
+        logout: (_) => _logout(emit),
+        updateProfile: (e) => _updateProfile(e.name, e.profileImage, emit),
       );
     });
   }
 
-  Future<void> _checkAuthStatus(
-      _CheckAuthStatus event, Emitter<AuthState> emit) async {
+  Future<void> _checkAuthStatus(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
     final result = await _getCurrentUserUseCase();
     result.fold(
@@ -37,12 +36,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _login(_Login event, Emitter<AuthState> emit) async {
+  Future<void> _login(
+    String email,
+    String password,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthState.loading());
     final result = await _loginUseCase(
       LoginParams(
-        email: event.email,
-        password: event.password,
+        email: email,
+        password: password,
       ),
     );
     result.fold(
@@ -51,7 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _logout(_Logout event, Emitter<AuthState> emit) async {
+  Future<void> _logout(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
     final result = await _logoutUseCase();
     result.fold(
@@ -61,7 +64,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _updateProfile(
-      _UpdateProfile event, Emitter<AuthState> emit) async {
+    String name,
+    String? profileImage,
+    Emitter<AuthState> emit,
+  ) async {
     // This would be implemented with a separate UpdateProfileUseCase
     // For now, we'll just emit the current state
     emit(state);

@@ -5,6 +5,11 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class ConnectivityService {
+  ConnectivityService()
+      : _connectivity = Connectivity(),
+        _connectionStatusController = StreamController<bool>.broadcast() {
+    _init();
+  }
   final Connectivity _connectivity;
   final StreamController<bool> _connectionStatusController;
 
@@ -12,16 +17,8 @@ class ConnectivityService {
   bool _isConnected = true;
   bool get isConnected => _isConnected;
 
-  ConnectivityService()
-      : _connectivity = Connectivity(),
-        _connectionStatusController = StreamController<bool>.broadcast() {
-    _init();
-  }
-
   void _init() {
-    _connectivity.onConnectivityChanged.listen((result) {
-      _updateConnectionStatus(result);
-    });
+    _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
     // Initial check
     _checkConnectivity();

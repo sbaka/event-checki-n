@@ -10,6 +10,6 @@ class LogoutUseCase {
   LogoutUseCase(this._authRepository);
 
   Future<Either<Failure, void>> call() async {
-    return await _authRepository.logout();
+    return _authRepository.logout();
   }
 }

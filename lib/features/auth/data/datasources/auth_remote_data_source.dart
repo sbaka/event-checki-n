@@ -52,12 +52,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       // Extract tokens from response
-      final accessToken = data['access_token'] as String;
-      final refreshToken = data['refresh_token'] as String;
+      final _accessToken = data['access_token'] as String;
+      final _refreshToken = data['refresh_token'] as String;
 
       // Save tokens using secure storage
-      // await _secureStorage.saveAccessToken(accessToken);
-      // await _secureStorage.saveRefreshToken(refreshToken);
+      // await _secureStorage.saveAccessToken(_accessToken);
+      // await _secureStorage.saveRefreshToken(_refreshToken);
 
       // Extract user data
       final userData = data['user'] as Map<String, dynamic>;
@@ -121,12 +121,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       // Extract new tokens
-      final accessToken = data['access_token'] as String;
-      final newRefreshToken = data['refresh_token'] as String;
+      final _accessToken = data['access_token'] as String;
+      final _newRefreshToken = data['refresh_token'] as String;
 
       // Save new tokens
-      // await _secureStorage.saveAccessToken(accessToken);
-      // await _secureStorage.saveRefreshToken(newRefreshToken);
+      // await _secureStorage.saveAccessToken(_accessToken);
+      // await _secureStorage.saveRefreshToken(_newRefreshToken);
 
       return true;
     } catch (e) {

@@ -60,8 +60,8 @@ abstract class $AppRouter extends _i13.RootStackRouter {
       return _i13.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i2.CheckInPage(
-          key: args.key,
           eventId: args.eventId,
+          key: args.key,
         ),
       );
     },
@@ -189,14 +189,14 @@ class AttendeeImportRouteArgs {
 /// [_i2.CheckInPage]
 class CheckInRoute extends _i13.PageRouteInfo<CheckInRouteArgs> {
   CheckInRoute({
-    _i14.Key? key,
     required String eventId,
+    _i14.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           CheckInRoute.name,
           args: CheckInRouteArgs(
-            key: key,
             eventId: eventId,
+            key: key,
           ),
           rawPathParams: {'eventId': eventId},
           initialChildren: children,
@@ -210,17 +210,17 @@ class CheckInRoute extends _i13.PageRouteInfo<CheckInRouteArgs> {
 
 class CheckInRouteArgs {
   const CheckInRouteArgs({
-    this.key,
     required this.eventId,
+    this.key,
   });
-
-  final _i14.Key? key;
 
   final String eventId;
 
+  final _i14.Key? key;
+
   @override
   String toString() {
-    return 'CheckInRouteArgs{key: $key, eventId: $eventId}';
+    return 'CheckInRouteArgs{eventId: $eventId, key: $key}';
   }
 }
 

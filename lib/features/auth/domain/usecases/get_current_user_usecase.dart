@@ -11,6 +11,6 @@ class GetCurrentUserUseCase {
   GetCurrentUserUseCase(this._authRepository);
 
   Future<Either<Failure, User>> call() async {
-    return await _authRepository.getCurrentUser();
+    return _authRepository.getCurrentUser();
   }
 }

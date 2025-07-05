@@ -41,8 +41,14 @@ class AppRouter extends $AppRouter {
 
         // Event management routes
         AutoRoute(
-          path: '/events/:eventId',
-          page: EventDetailsRoute.page,
+          path: '/events/form',
+          page: EventFormRoute.page,
+        ),
+
+        // Attendee import route
+        AutoRoute(
+          path: '/events/:eventId/import',
+          page: AttendeeImportRoute.page,
         ),
 
         // Check-in routes
@@ -53,10 +59,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           path: '/events/:eventId/check-in/manual',
           page: ManualCheckInRoute.page,
-        ),
-        AutoRoute(
-          path: '/events/:eventId/check-in/batch',
-          page: BatchCheckInRoute.page,
         ),
 
         // Analytics routes

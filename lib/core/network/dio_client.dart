@@ -4,21 +4,16 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:event_check_in/core/config/app_config.dart';
 import 'package:event_check_in/core/errors/exceptions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
 class DioClient {
-  late final Dio _dio;
-  final AppConfig _appConfig;
-
   DioClient(this._appConfig) {
     _dio = Dio(
       BaseOptions(
         baseUrl: _appConfig.apiBaseUrl,
         connectTimeout: Duration(milliseconds: _appConfig.connectionTimeout),
         receiveTimeout: Duration(milliseconds: _appConfig.receiveTimeout),
-        responseType: ResponseType.json,
       ),
     );
 
@@ -68,6 +63,9 @@ class DioClient {
       ),
     );
   }
+  // final ConnectivityService _connectivityService;
+  late final Dio _dio;
+  final AppConfig _appConfig;
 
   Future<Response<T>> get<T>(
     String path, {
@@ -213,7 +211,7 @@ class DioClient {
         final statusCode = error.response?.statusCode;
         final data = error.response?.data;
 
-        String message = 'Something went wrong';
+        var message = 'Something went wrong';
         if (data != null && data is Map<String, dynamic>) {
           message = data['message'] as String? ?? message;
         }
