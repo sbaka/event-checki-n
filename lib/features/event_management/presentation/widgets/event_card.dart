@@ -4,30 +4,29 @@ import 'package:event_check_in/features/event_management/domain/entities/event.d
 import 'package:event_check_in/core/routes/app_router.gr.dart';
 
 class EventCard extends StatelessWidget {
-  final Event event;
-  final int attendeesCount;
-  final int checkedInCount;
-
   const EventCard({
     super.key,
     required this.event,
     required this.attendeesCount,
     required this.checkedInCount,
   });
+  final Event event;
+  final int attendeesCount;
+  final int checkedInCount;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12.0),
+      margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
           // Navigate to event details
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -87,7 +86,8 @@ class EventCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
-                  value: attendeesCount > 0 ? checkedInCount / attendeesCount : 0,
+                  value:
+                      attendeesCount > 0 ? checkedInCount / attendeesCount : 0,
                   minHeight: 8,
                   backgroundColor: theme.colorScheme.primaryContainer,
                 ),
@@ -110,7 +110,8 @@ class EventCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   TextButton.icon(
                     onPressed: () {
-                      context.router.push(EventAnalyticsRoute(eventId: event.id));
+                      context.router
+                          .push(EventAnalyticsRoute(eventId: event.id));
                     },
                     icon: const Icon(Icons.analytics),
                     label: const Text('Analytics'),

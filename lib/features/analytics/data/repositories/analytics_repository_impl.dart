@@ -1,22 +1,23 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/errors/failures.dart';
-import '../../../../core/database/database.dart';
-import '../../../event_management/domain/repositories/event_repository.dart';
-import '../../../event_management/domain/repositories/attendee_repository.dart';
-import '../../domain/entities/event_analytics.dart';
-import '../../domain/repositories/analytics_repository.dart';
+import 'package:event_check_in/core/errors/failures.dart';
+import 'package:event_check_in/core/database/database.dart';
+import 'package:event_check_in/features/event_management/domain/repositories/event_repository.dart';
+import 'package:event_check_in/features/event_management/domain/repositories/attendee_repository.dart';
+import 'package:event_check_in/features/analytics/domain/entities/event_analytics.dart';
+import 'package:event_check_in/features/analytics/domain/repositories/analytics_repository.dart';
 
 @Injectable(as: AnalyticsRepository)
 class AnalyticsRepositoryImpl implements AnalyticsRepository {
+  AnalyticsRepositoryImpl(
+      this._database, this._eventRepository, this._attendeeRepository);
   final AppDatabase _database;
   final EventRepository _eventRepository;
   final AttendeeRepository _attendeeRepository;
 
-  AnalyticsRepositoryImpl(this._database, this._eventRepository, this._attendeeRepository);
-
   @override
-  Future<Either<Failure, EventAnalytics>> getEventAnalytics(String eventId) async {
+  Future<Either<Failure, EventAnalytics>> getEventAnalytics(
+      String eventId) async {
     try {
       // Get event details
       final eventResult = await _eventRepository.getEventById(eventId);
@@ -26,7 +27,8 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
       );
 
       // Get attendee count
-      final attendeeCountResult = await _attendeeRepository.getAttendeeCount(eventId);
+      final attendeeCountResult =
+          await _attendeeRepository.getAttendeeCount(eventId);
       final totalAttendees = attendeeCountResult.fold(
         (failure) => 0,
         (count) => count,
@@ -36,7 +38,8 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
       final checkedInCount = await _database.getEventCheckedInCount(eventId);
 
       // Calculate check-in rate
-      final checkInRate = totalAttendees > 0 ? (checkedInCount / totalAttendees) * 100 : 0.0;
+      final checkInRate =
+          totalAttendees > 0 ? (checkedInCount / totalAttendees) * 100 : 0.0;
 
       // Get check-ins by hour (simplified - last 24 hours)
       final checkInsByHour = await _getCheckInsByHour(eventId);
@@ -63,14 +66,19 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, int>>> getCheckInsByTimeRange(String eventId, DateTime start, DateTime end) async {
+  Future<Either<Failure, Map<String, int>>> getCheckInsByTimeRange(
+      String eventId, DateTime start, DateTime end) async {
     try {
       // This would require more complex database queries
       // For now, return simplified data
       final checkIns = await _database.getCheckInsByEvent(eventId);
-      final filteredCheckIns = checkIns.where((checkIn) => 
-        checkIn.checkInTime.isAfter(start) && checkIn.checkInTime.isBefore(end)
-      ).toList();
+      final filteredCheckIns = checkIns
+          .where(
+            (checkIn) =>
+                checkIn.checkInTime.isAfter(start) &&
+                checkIn.checkInTime.isBefore(end),
+          )
+          .toList();
 
       final hourlyData = <String, int>{};
       for (final checkIn in filteredCheckIns) {
@@ -85,10 +93,11 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
   }
 
   @override
-  Future<Either<Failure, List<Map<String, dynamic>>>> getTopCheckInHours(String eventId) async {
+  Future<Either<Failure, List<Map<String, dynamic>>>> getTopCheckInHours(
+      String eventId) async {
     try {
       final checkIns = await _database.getCheckInsByEvent(eventId);
-      
+
       final hourlyData = <int, int>{};
       for (final checkIn in checkIns) {
         final hour = checkIn.checkInTime.hour;
@@ -98,10 +107,15 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
       final sortedHours = hourlyData.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
 
-      final topHours = sortedHours.take(5).map((entry) => {
-        'hour': entry.key,
-        'count': entry.value,
-      }).toList();
+      final topHours = sortedHours
+          .take(5)
+          .map(
+            (entry) => {
+              'hour': entry.key,
+              'count': entry.value,
+            },
+          )
+          .toList();
 
       return Right(topHours);
     } catch (e) {

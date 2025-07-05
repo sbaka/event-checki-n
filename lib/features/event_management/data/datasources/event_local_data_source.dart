@@ -45,9 +45,11 @@ class EventLocalDataSourceImpl implements EventLocalDataSource {
   Future<List<EventData>> searchEvents(String query) async {
     final events = await _database.getAllEvents();
     return events
-        .where((event) =>
-            event.name.toLowerCase().contains(query.toLowerCase()) ||
-            event.description.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (event) =>
+              event.name.toLowerCase().contains(query.toLowerCase()) ||
+              event.description.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
   }
 

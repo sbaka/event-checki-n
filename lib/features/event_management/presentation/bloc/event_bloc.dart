@@ -10,10 +10,6 @@ import 'package:event_check_in/features/event_management/presentation/bloc/event
 
 @injectable
 class EventBloc extends Bloc<EventEvent, EventState> {
-  final CreateEventUseCase _createEventUseCase;
-  final GetEventsUseCase _getEventsUseCase;
-  final UpdateEventUseCase _updateEventUseCase;
-  final DeleteEventUseCase _deleteEventUseCase;
 
   EventBloc(
     this._createEventUseCase,
@@ -31,6 +27,10 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       );
     });
   }
+  final CreateEventUseCase _createEventUseCase;
+  final GetEventsUseCase _getEventsUseCase;
+  final UpdateEventUseCase _updateEventUseCase;
+  final DeleteEventUseCase _deleteEventUseCase;
 
   Future<void> _onLoadEvents(Emitter<EventState> emit) async {
     emit(const EventState.loading());

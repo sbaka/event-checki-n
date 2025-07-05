@@ -13,22 +13,17 @@ class AppTheme {
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
       primary: _primaryColor,
-      primaryContainer: _primaryColor.withOpacity(0.1),
-      onPrimaryContainer: _primaryColor.withOpacity(0.8),
+      primaryContainer: _primaryColor.withValues(alpha: 0.1),
+      onPrimaryContainer: _primaryColor.withValues(alpha: 0.8),
       secondary: _secondaryColor,
       onSecondary: Colors.white,
-      secondaryContainer: _secondaryColor.withOpacity(0.1),
-      onSecondaryContainer: _secondaryColor.withOpacity(0.8),
+      secondaryContainer: _secondaryColor.withValues(alpha: 0.1),
+      onSecondaryContainer: _secondaryColor.withValues(alpha: 0.8),
       tertiary: _tertiaryColor,
       onTertiary: Colors.white,
-      tertiaryContainer: _tertiaryColor.withOpacity(0.1),
-      onTertiaryContainer: _tertiaryColor.withOpacity(0.8),
+      tertiaryContainer: _tertiaryColor.withValues(alpha: 0.1),
+      onTertiaryContainer: _tertiaryColor.withValues(alpha: 0.8),
       error: _errorColor,
-      onError: Colors.white,
-      background: Colors.white,
-      onBackground: Colors.black,
-      surface: Colors.white,
-      onSurface: Colors.black,
     ),
     textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme),
     fontFamily: 'Poppins',
@@ -84,7 +79,7 @@ class AppTheme {
         borderSide: const BorderSide(color: _errorColor),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -102,7 +97,7 @@ class AppTheme {
       ),
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: _primaryColor.withOpacity(0.1),
+      backgroundColor: _primaryColor.withValues(alpha: 0.1),
       labelStyle: const TextStyle(color: _primaryColor),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(
@@ -118,22 +113,19 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       primary: _primaryColor,
       onPrimary: Colors.white,
-      primaryContainer: _primaryColor.withOpacity(0.2),
+      primaryContainer: _primaryColor.withValues(alpha: 0.2),
       onPrimaryContainer: Colors.white,
       secondary: _secondaryColor,
       onSecondary: Colors.white,
-      secondaryContainer: _secondaryColor.withOpacity(0.2),
+      secondaryContainer: _secondaryColor.withValues(alpha: 0.2),
       onSecondaryContainer: Colors.white,
       tertiary: _tertiaryColor,
       onTertiary: Colors.white,
-      tertiaryContainer: _tertiaryColor.withOpacity(0.2),
+      tertiaryContainer: _tertiaryColor.withValues(alpha: 0.2),
       onTertiaryContainer: Colors.white,
       error: _errorColor,
       onError: Colors.white,
-      background: const Color(0xFF121212),
-      onBackground: Colors.white,
       surface: const Color(0xFF1E1E1E),
-      onSurface: Colors.white,
     ),
     textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
     fontFamily: 'Poppins',
@@ -189,7 +181,7 @@ class AppTheme {
         borderSide: const BorderSide(color: _errorColor),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: const Color(0xFF2C2C2C),
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -209,7 +201,7 @@ class AppTheme {
       ),
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: _primaryColor.withOpacity(0.2),
+      backgroundColor: _primaryColor.withValues(alpha: 0.2),
       labelStyle: const TextStyle(color: Colors.white),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(

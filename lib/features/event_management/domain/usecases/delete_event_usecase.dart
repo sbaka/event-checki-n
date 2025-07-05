@@ -1,15 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/errors/failures.dart';
-import '../repositories/event_repository.dart';
+import 'package:event_check_in/core/errors/failures.dart';
+import 'package:event_check_in/features/event_management/domain/repositories/event_repository.dart';
 
 @injectable
 class DeleteEventUseCase {
+  DeleteEventUseCase(this._repository);
   final EventRepository _repository;
 
-  DeleteEventUseCase(this._repository);
-
   Future<Either<Failure, void>> call(String eventId) async {
-    return await _repository.deleteEvent(eventId);
+    return _repository.deleteEvent(eventId);
   }
 }

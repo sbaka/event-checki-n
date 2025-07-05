@@ -3,12 +3,6 @@ import 'package:event_check_in/features/event_management/domain/entities/attende
 import 'package:event_check_in/features/event_management/domain/entities/check_in.dart';
 
 class CheckInResultWidget extends StatelessWidget {
-  final Attendee attendee;
-  final CheckIn? checkIn;
-  final bool isSuccess;
-  final String? errorMessage;
-  final VoidCallback? onDismiss;
-
   const CheckInResultWidget({
     super.key,
     required this.attendee,
@@ -17,6 +11,11 @@ class CheckInResultWidget extends StatelessWidget {
     this.errorMessage,
     this.onDismiss,
   });
+  final Attendee attendee;
+  final CheckIn? checkIn;
+  final bool isSuccess;
+  final String? errorMessage;
+  final VoidCallback? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +43,8 @@ class CheckInResultWidget extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: isSuccess 
-                    ? Colors.green.withValues(alpha: 0.1) 
+                color: isSuccess
+                    ? Colors.green.withValues(alpha: 0.1)
                     : Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
@@ -55,9 +54,9 @@ class CheckInResultWidget extends StatelessWidget {
                 color: isSuccess ? Colors.green : Colors.red,
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Attendee Name
             Text(
               '${attendee.firstName} ${attendee.lastName}',
@@ -67,9 +66,9 @@ class CheckInResultWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Email
             Text(
               attendee.email,
@@ -79,9 +78,9 @@ class CheckInResultWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Status Message
             Container(
               padding: const EdgeInsets.symmetric(
@@ -89,14 +88,14 @@ class CheckInResultWidget extends StatelessWidget {
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color: isSuccess 
+                color: isSuccess
                     ? Colors.green.withValues(alpha: 0.1)
                     : Colors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                isSuccess 
-                    ? 'Successfully Checked In!' 
+                isSuccess
+                    ? 'Successfully Checked In!'
                     : errorMessage ?? 'Check-in Failed',
                 style: TextStyle(
                   fontSize: 16,
@@ -106,10 +105,10 @@ class CheckInResultWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            
+
             if (isSuccess && checkIn != null) ...[
               const SizedBox(height: 16),
-              
+
               // Check-in Details
               Container(
                 width: double.infinity,
@@ -163,7 +162,7 @@ class CheckInResultWidget extends StatelessWidget {
                 ),
               ),
             ],
-            
+
             if (onDismiss != null) ...[
               const SizedBox(height: 24),
               SizedBox(
@@ -216,7 +215,7 @@ class CheckInResultWidget extends StatelessWidget {
 
   String _formatDateTime(DateTime dateTime) {
     return '${dateTime.day}/${dateTime.month}/${dateTime.year} '
-           '${dateTime.hour.toString().padLeft(2, '0')}:'
-           '${dateTime.minute.toString().padLeft(2, '0')}';
+        '${dateTime.hour.toString().padLeft(2, '0')}:'
+        '${dateTime.minute.toString().padLeft(2, '0')}';
   }
 }

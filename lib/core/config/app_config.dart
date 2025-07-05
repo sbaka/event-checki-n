@@ -8,19 +8,18 @@ enum Environment {
 
 @injectable
 class AppConfig {
-  factory AppConfig.staging() => AppConfig(
-        apiBaseUrl: 'https://staging-api.eventcheckin.com/v1',
-        enableLogging: true,
-        connectionTimeout: 30000,
-        receiveTimeout: 30000,
-      );
-
   AppConfig({
     required this.apiBaseUrl,
     required this.enableLogging,
     required this.connectionTimeout,
     required this.receiveTimeout,
   });
+  factory AppConfig.staging() => AppConfig(
+        apiBaseUrl: 'https://staging-api.eventcheckin.com/v1',
+        enableLogging: true,
+        connectionTimeout: 30000,
+        receiveTimeout: 30000,
+      );
 
   factory AppConfig.development() => AppConfig(
         apiBaseUrl: 'https://dev-api.eventcheckin.com/v1',

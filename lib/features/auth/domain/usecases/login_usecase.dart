@@ -7,9 +7,8 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class LoginUseCase {
-  final AuthRepository _authRepository;
-
   LoginUseCase(this._authRepository);
+  final AuthRepository _authRepository;
 
   Future<Either<Failure, User>> call(LoginParams params) async {
     return _authRepository.login(
@@ -20,13 +19,12 @@ class LoginUseCase {
 }
 
 class LoginParams extends Equatable {
-  final String email;
-  final String password;
-
   const LoginParams({
     required this.email,
     required this.password,
   });
+  final String email;
+  final String password;
 
   @override
   List<Object?> get props => [email, password];

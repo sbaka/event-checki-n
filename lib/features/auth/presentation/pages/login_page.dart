@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
             return SafeArea(
               child: Center(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                           child: Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.all(12),
                             child: isLoading
                                 ? const SizedBox(
                                     height: 24,

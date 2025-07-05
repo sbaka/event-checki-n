@@ -10,12 +10,11 @@ import 'package:event_check_in/features/event_management/domain/entities/attende
 
 @RoutePage()
 class ManualCheckInPage extends StatefulWidget {
-  final String eventId;
-
   const ManualCheckInPage({
     super.key,
     @PathParam('eventId') required this.eventId,
   });
+  final String eventId;
 
   @override
   State<ManualCheckInPage> createState() => _ManualCheckInPageState();
@@ -55,15 +54,15 @@ class _ManualCheckInPageState extends State<ManualCheckInPage> {
                     duration: const Duration(seconds: 3),
                   ),
                 );
-                
+
                 // Clear search and refocus
                 _searchController.clear();
                 _searchFocusNode.requestFocus();
-                
+
                 // Reset state after showing success
                 context.read<CheckInBloc>().add(
-                  const CheckInEvent.resetState(),
-                );
+                      const CheckInEvent.resetState(),
+                    );
               },
               checkInFailure: (failure, attendee) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -120,12 +119,13 @@ class _ManualCheckInPageState extends State<ManualCheckInPage> {
                         onChanged: (query) {
                           if (query.isNotEmpty) {
                             context.read<CheckInBloc>().add(
-                              CheckInEvent.searchAttendee(query, widget.eventId),
-                            );
+                                  CheckInEvent.searchAttendee(
+                                      query, widget.eventId),
+                                );
                           } else {
                             context.read<CheckInBloc>().add(
-                              const CheckInEvent.resetState(),
-                            );
+                                  const CheckInEvent.resetState(),
+                                );
                           }
                         },
                       ),
@@ -197,13 +197,12 @@ class _EmptySearchState extends StatelessWidget {
 }
 
 class _AttendeesList extends StatelessWidget {
-  final List<Attendee> attendees;
-  final String eventId;
-
   const _AttendeesList({
     required this.attendees,
     required this.eventId,
   });
+  final List<Attendee> attendees;
+  final String eventId;
 
   @override
   Widget build(BuildContext context) {
@@ -286,12 +285,12 @@ class _AttendeesList extends StatelessWidget {
                 : ElevatedButton(
                     onPressed: () {
                       context.read<CheckInBloc>().add(
-                        CheckInEvent.checkInAttendee(
-                          attendee.id,
-                          eventId,
-                          const CheckInMethod.manual(),
-                        ),
-                      );
+                            CheckInEvent.checkInAttendee(
+                              attendee.id,
+                              eventId,
+                              const CheckInMethod.manual(),
+                            ),
+                          );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -312,9 +311,8 @@ class _AttendeesList extends StatelessWidget {
 }
 
 class _ErrorState extends StatelessWidget {
-  final String message;
-
   const _ErrorState({required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {

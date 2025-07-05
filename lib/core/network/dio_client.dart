@@ -250,7 +250,8 @@ class DioClient {
       case DioExceptionType.unknown:
       default:
         return UnknownException(
-            message: error.message ?? 'Unknown error occurred');
+          message: error.message ?? 'Unknown error occurred',
+        );
     }
   }
 

@@ -28,9 +28,8 @@ abstract class AuthRemoteDataSource {
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final DioClient _dioClient;
-
   AuthRemoteDataSourceImpl(this._dioClient);
+  final DioClient _dioClient;
 
   @override
   Future<UserModel> login({
@@ -52,8 +51,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       // Extract tokens from response
-      final _accessToken = data['access_token'] as String;
-      final _refreshToken = data['refresh_token'] as String;
+      final accessToken = data['access_token'] as String;
+      final refreshToken = data['refresh_token'] as String;
 
       // Save tokens using secure storage
       // await _secureStorage.saveAccessToken(_accessToken);
@@ -121,8 +120,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       // Extract new tokens
-      final _accessToken = data['access_token'] as String;
-      final _newRefreshToken = data['refresh_token'] as String;
+      final accessToken = data['access_token'] as String;
+      final newRefreshToken = data['refresh_token'] as String;
 
       // Save new tokens
       // await _secureStorage.saveAccessToken(_accessToken);
@@ -140,7 +139,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String? profileImage,
   }) async {
     try {
-      final Map<String, dynamic> data = {
+      final data = <String, dynamic>{
         'name': name,
       };
 

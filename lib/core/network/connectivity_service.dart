@@ -25,18 +25,20 @@ class ConnectivityService {
   }
 
   Future<void> _checkConnectivity() async {
-    final result = await _connectivity.checkConnectivity();
-    _updateConnectionStatus(result);
+    final results = await _connectivity.checkConnectivity();
+    _updateConnectionStatus(results);
   }
 
-  void _updateConnectionStatus(ConnectivityResult result) {
-    _isConnected = result != ConnectivityResult.none;
+  void _updateConnectionStatus(List<ConnectivityResult> results) {
+    // The API now returns a list of connectivity results. We consider the device
+    // connected if there is at least one result and none of them is `none`.
+    _isConnected = results.any((r) => r != ConnectivityResult.none);
     _connectionStatusController.add(_isConnected);
   }
 
   Future<bool> checkConnection() async {
-    final result = await _connectivity.checkConnectivity();
-    _updateConnectionStatus(result);
+    final results = await _connectivity.checkConnectivity();
+    _updateConnectionStatus(results);
     return _isConnected;
   }
 

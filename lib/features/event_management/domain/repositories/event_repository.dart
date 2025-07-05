@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../entities/event.dart';
-import '../../../../core/errors/failures.dart';
+import 'package:event_check_in/features/event_management/domain/entities/event.dart';
+import 'package:event_check_in/core/errors/failures.dart';
 
 abstract class EventRepository {
   Future<Either<Failure, List<Event>>> getAllEvents();

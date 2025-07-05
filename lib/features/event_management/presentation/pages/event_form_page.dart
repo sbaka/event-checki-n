@@ -145,7 +145,7 @@ class _EventFormPageState extends State<EventFormPage> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: isStartDate
           ? _startDate ?? DateTime.now()
@@ -206,8 +206,10 @@ class _EventFormPageState extends State<EventFormPage> {
         (createdEvent) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text(
-                    'Event ${widget.event == null ? 'created' : 'updated'} successfully')),
+              content: Text(
+                'Event ${widget.event == null ? 'created' : 'updated'} successfully',
+              ),
+            ),
           );
           context.router.pop();
         },

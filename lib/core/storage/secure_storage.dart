@@ -3,9 +3,8 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class SecureStorage {
-  final FlutterSecureStorage _secureStorage;
-
   SecureStorage() : _secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage;
 
   // Auth token keys
   static const String _accessTokenKey = 'access_token';
@@ -18,7 +17,7 @@ class SecureStorage {
   }
 
   Future<String?> getAccessToken() async {
-    return await _secureStorage.read(key: _accessTokenKey);
+    return _secureStorage.read(key: _accessTokenKey);
   }
 
   Future<void> saveRefreshToken(String token) async {
@@ -26,7 +25,7 @@ class SecureStorage {
   }
 
   Future<String?> getRefreshToken() async {
-    return await _secureStorage.read(key: _refreshTokenKey);
+    return _secureStorage.read(key: _refreshTokenKey);
   }
 
   Future<void> saveUserId(String userId) async {
@@ -34,7 +33,7 @@ class SecureStorage {
   }
 
   Future<String?> getUserId() async {
-    return await _secureStorage.read(key: _userIdKey);
+    return _secureStorage.read(key: _userIdKey);
   }
 
   // Clear all auth data
@@ -50,7 +49,7 @@ class SecureStorage {
   }
 
   Future<String?> getSecureData(String key) async {
-    return await _secureStorage.read(key: key);
+    return _secureStorage.read(key: key);
   }
 
   Future<void> deleteSecureData(String key) async {

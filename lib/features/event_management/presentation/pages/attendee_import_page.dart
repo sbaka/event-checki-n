@@ -120,39 +120,43 @@ class _AttendeeImportPageState extends State<AttendeeImportPage> {
           style: Theme.of(context).textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
-        ..._requiredFields.map((field) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text('$field*'),
-                  ),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: _fieldMapping[field],
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        isDense: true,
-                      ),
-                      items: csvColumns
-                          .map((column) => DropdownMenuItem(
-                                value: column,
-                                child: Text(column),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          if (value != null) {
-                            _fieldMapping[field] = value;
-                          }
-                        });
-                      },
+        ..._requiredFields.map(
+          (field) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text('$field*'),
+                ),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _fieldMapping[field],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      isDense: true,
                     ),
+                    items: csvColumns
+                        .map(
+                          (column) => DropdownMenuItem(
+                            value: column,
+                            child: Text(column),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          _fieldMapping[field] = value;
+                        }
+                      });
+                    },
                   ),
-                ],
-              ),
-            )),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -169,11 +173,13 @@ class _AttendeeImportPageState extends State<AttendeeImportPage> {
             .map((key) => DataColumn(label: Text(key)))
             .toList(),
         rows: displayData
-            .map((row) => DataRow(
-                  cells: row.values
-                      .map((value) => DataCell(Text(value?.toString() ?? '')))
-                      .toList(),
-                ))
+            .map(
+              (row) => DataRow(
+                cells: row.values
+                    .map((value) => DataCell(Text(value?.toString() ?? '')))
+                    .toList(),
+              ),
+            )
             .toList(),
       ),
     );
@@ -207,8 +213,8 @@ class _AttendeeImportPageState extends State<AttendeeImportPage> {
 
       final headers = csvData.first.map((e) => e.toString()).toList();
       final rows = csvData.skip(1).map((row) {
-        final Map<String, dynamic> rowMap = {};
-        for (int i = 0; i < headers.length && i < row.length; i++) {
+        final rowMap = <String, dynamic>{};
+        for (var i = 0; i < headers.length && i < row.length; i++) {
           rowMap[headers[i]] = row[i];
         }
         return rowMap;
@@ -261,7 +267,7 @@ class _AttendeeImportPageState extends State<AttendeeImportPage> {
     try {
       // Transform data using field mapping
       final transformedData = _previewData!.map((row) {
-        final Map<String, dynamic> transformed = {};
+        final transformed = <String, dynamic>{};
         for (final entry in _fieldMapping.entries) {
           transformed[entry.key] = row[entry.value];
         }

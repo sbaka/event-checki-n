@@ -1,16 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/errors/failures.dart';
-import '../entities/event.dart';
-import '../repositories/event_repository.dart';
+import 'package:event_check_in/core/errors/failures.dart';
+import 'package:event_check_in/features/event_management/domain/entities/event.dart';
+import 'package:event_check_in/features/event_management/domain/repositories/event_repository.dart';
 
 @injectable
 class CreateEventUseCase {
+  CreateEventUseCase(this._repository);
   final EventRepository _repository;
 
-  CreateEventUseCase(this._repository);
-
   Future<Either<Failure, Event>> call(Event event) async {
-    return await _repository.createEvent(event);
+    return _repository.createEvent(event);
   }
 }

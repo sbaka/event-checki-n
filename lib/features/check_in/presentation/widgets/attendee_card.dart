@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:event_check_in/features/event_management/domain/entities/attendee.dart';
 
 class AttendeeCard extends StatelessWidget {
-  final Attendee attendee;
-  final bool isCheckedIn;
-  final VoidCallback? onCheckIn;
-  final VoidCallback? onTap;
-  final bool showCheckInButton;
-
   const AttendeeCard({
     super.key,
     required this.attendee,
@@ -16,6 +10,11 @@ class AttendeeCard extends StatelessWidget {
     this.onTap,
     this.showCheckInButton = true,
   });
+  final Attendee attendee;
+  final bool isCheckedIn;
+  final VoidCallback? onCheckIn;
+  final VoidCallback? onTap;
+  final bool showCheckInButton;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +40,9 @@ class AttendeeCard extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              
+
               const SizedBox(width: 16),
-              
+
               // Attendee Info
               Expanded(
                 child: Column(
@@ -57,9 +56,9 @@ class AttendeeCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 4),
-                    
+
                     // Email
                     Text(
                       attendee.email,
@@ -68,9 +67,9 @@ class AttendeeCard extends StatelessWidget {
                         color: Colors.grey[600],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     // Tags Row
                     Wrap(
                       spacing: 8,
@@ -95,7 +94,7 @@ class AttendeeCard extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Action Button
               if (showCheckInButton) ...[
                 const SizedBox(width: 12),
@@ -137,7 +136,6 @@ class AttendeeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
-          width: 1,
         ),
       ),
       child: Row(

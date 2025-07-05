@@ -1,14 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/errors/failures.dart';
-import '../entities/attendee.dart';
-import '../repositories/attendee_repository.dart';
+import 'package:event_check_in/core/errors/failures.dart';
+import 'package:event_check_in/features/event_management/domain/entities/attendee.dart';
+import 'package:event_check_in/features/event_management/domain/repositories/attendee_repository.dart';
 
 @injectable
 class ImportAttendeesUseCase {
-  final AttendeeRepository _repository;
 
   ImportAttendeesUseCase(this._repository);
+  final AttendeeRepository _repository;
 
   Future<Either<Failure, List<Attendee>>> call(String eventId, List<Map<String, dynamic>> csvData) async {
     return _repository.importAttendeesFromCsv(eventId, csvData);

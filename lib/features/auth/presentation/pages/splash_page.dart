@@ -34,25 +34,25 @@ class SplashPage extends StatelessWidget {
               orElse: () {},
             );
           },
-          child: Center(
+          child: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.event,
                   size: 100,
                   color: Colors.purple,
                 ),
-                const SizedBox(height: 24),
-                const Text(
+                SizedBox(height: 24),
+                Text(
                   'Event Check-In',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 48),
-                const CircularProgressIndicator(),
+                SizedBox(height: 48),
+                CircularProgressIndicator(),
               ],
             ),
           ),

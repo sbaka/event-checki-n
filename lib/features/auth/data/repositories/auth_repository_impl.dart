@@ -11,15 +11,14 @@ import 'package:injectable/injectable.dart';
 
 @Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource _remoteDataSource;
-  final AuthLocalDataSource _localDataSource;
-  final ConnectivityService _connectivityService;
-
   AuthRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
     this._connectivityService,
   );
+  final AuthRemoteDataSource _remoteDataSource;
+  final AuthLocalDataSource _localDataSource;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, User>> login({
@@ -132,10 +131,12 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await _remoteDataSource.refreshToken();
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(
-        message: e.message,
-        statusCode: e.statusCode,
-      ));
+      return Left(
+        ServerFailure(
+          message: e.message,
+          statusCode: e.statusCode,
+        ),
+      );
     } on AuthException catch (e) {
       return Left(
         AuthFailure(
@@ -200,10 +201,12 @@ class AuthRepositoryImpl implements AuthRepository {
         ),
       );
     } on ValidationException catch (e) {
-      return Left(ValidationFailure(
-        message: e.message,
-        errors: e.errors,
-      ));
+      return Left(
+        ValidationFailure(
+          message: e.message,
+          errors: e.errors,
+        ),
+      );
     } catch (e) {
       return Left(UnknownFailure(message: e.toString()));
     }

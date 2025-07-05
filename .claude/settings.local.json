@@ -5,7 +5,10 @@
       "Bash(mkdir:*)",
       "Bash(flutter pub:*)",
       "Bash(mv:*)",
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "Bash(flutter:*)",
+      "Bash(pod install:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

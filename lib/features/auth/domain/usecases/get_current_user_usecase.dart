@@ -6,9 +6,8 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class GetCurrentUserUseCase {
-  final AuthRepository _authRepository;
-
   GetCurrentUserUseCase(this._authRepository);
+  final AuthRepository _authRepository;
 
   Future<Either<Failure, User>> call() async {
     return _authRepository.getCurrentUser();

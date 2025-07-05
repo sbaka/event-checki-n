@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
-import 'injection.config.dart';
+import 'package:event_check_in/core/di/injection.config.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -10,8 +10,15 @@ final GetIt getIt = GetIt.instance;
   preferRelativeImports: true, // default
   asExtension: true, // default
 )
-Future<void> configureDependencies(String environment) async =>
-    getIt.init(environment: environment);
+Future<void> configureDependencies(String environment) async {
+  // Register the current environment so it can be injected elsewhere (e.g. AppConfig.fromEnvironment)
+  if (!getIt.isRegistered<String>()) {
+    getIt.registerSingleton<String>(environment);
+  }
+
+  // Initialize generated dependency registrations
+  await getIt.init(environment: environment);
+}
 
 abstract class Env {
   static const dev = 'dev';

@@ -109,12 +109,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i939.EventLocalDataSourceImpl(gh<_i660.AppDatabase>()));
     gh.factory<_i360.GetEventsUseCase>(
         () => _i360.GetEventsUseCase(gh<_i470.EventRepository>()));
-    gh.factory<_i385.CreateEventUseCase>(
-        () => _i385.CreateEventUseCase(gh<_i470.EventRepository>()));
     gh.factory<_i219.UpdateEventUseCase>(
         () => _i219.UpdateEventUseCase(gh<_i470.EventRepository>()));
     gh.factory<_i949.DeleteEventUseCase>(
         () => _i949.DeleteEventUseCase(gh<_i470.EventRepository>()));
+    gh.factory<_i385.CreateEventUseCase>(
+        () => _i385.CreateEventUseCase(gh<_i470.EventRepository>()));
     gh.factory<_i196.ImportAttendeesUseCase>(
         () => _i196.ImportAttendeesUseCase(gh<_i483.AttendeeRepository>()));
     gh.factory<_i107.AuthRemoteDataSource>(

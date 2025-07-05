@@ -71,7 +71,7 @@ class HiveStorage {
   static const String _eventsKey = 'events';
 
   Future<void> saveEvents<T>(List<T> events) async {
-    final jsonList = events.map((event) => jsonEncode(event)).toList();
+    final jsonList = events.map(jsonEncode).toList();
     await _box.put(_eventsKey, jsonEncode(jsonList));
   }
 
@@ -79,7 +79,7 @@ class HiveStorage {
   static const String _attendeesKey = 'attendees';
 
   Future<void> saveAttendees<T>(List<T> attendees) async {
-    final jsonList = attendees.map((attendee) => jsonEncode(attendee)).toList();
+    final jsonList = attendees.map(jsonEncode).toList();
     await _box.put(_attendeesKey, jsonEncode(jsonList));
   }
 
@@ -87,13 +87,13 @@ class HiveStorage {
   static const String _checkInsKey = 'check_ins';
 
   Future<void> saveCheckIns<T>(List<T> checkIns) async {
-    final jsonList = checkIns.map((checkIn) => jsonEncode(checkIn)).toList();
+    final jsonList = checkIns.map(jsonEncode).toList();
     await _box.put(_checkInsKey, jsonEncode(jsonList));
   }
 
   Future<void> addCheckIn<T>(T checkIn) async {
     final jsonString = _box.get(_checkInsKey);
-    List<dynamic> checkIns = [];
+    var checkIns = <dynamic>[];
 
     if (jsonString != null) {
       try {

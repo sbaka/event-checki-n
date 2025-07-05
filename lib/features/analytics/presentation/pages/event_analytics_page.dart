@@ -6,12 +6,11 @@ import 'package:event_check_in/features/analytics/domain/entities/event_analytic
 
 @RoutePage()
 class EventAnalyticsPage extends StatefulWidget {
-  final String eventId;
-
   const EventAnalyticsPage({
     super.key,
     @PathParam('eventId') required this.eventId,
   });
+  final String eventId;
 
   @override
   State<EventAnalyticsPage> createState() => _EventAnalyticsPageState();
@@ -101,7 +100,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -198,7 +197,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
     return Card(
       elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -261,7 +260,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
       child: Card(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -292,17 +291,17 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: checkInsByHour
-                            .entries
+                        children: checkInsByHour.entries
                             .map(
                               (entry) => Tooltip(
-                                message: '${entry.key}: ${entry.value} check-ins',
+                                message:
+                                    '${entry.key}: ${entry.value} check-ins',
                                 child: Container(
                                   width: 20,
                                   height: (entry.value / maxValue) * 120,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Colors.blue,
-                                    borderRadius: const BorderRadius.vertical(
+                                    borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(4),
                                     ),
                                   ),
@@ -319,9 +318,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
               // X-axis labels
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: checkInsByHour.keys
-                    .map((hour) => Text(hour))
-                    .toList(),
+                children: checkInsByHour.keys.map(Text.new).toList(),
               ),
             ],
           ),
@@ -341,7 +338,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
       child: Card(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               // Legend
@@ -356,7 +353,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
                     final color = _getCategoryColor(entry.key);
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
                         children: [
                           Container(
@@ -383,7 +380,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
               Expanded(
                 flex: 3,
                 child: Container(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: CustomPaint(
                     painter: SimplePieChartPainter(categoryData),
                     child: Container(),
@@ -416,25 +413,30 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
     // This would normally come from a bloc
     final recentCheckIns = [
       _CheckInItem(
-          name: 'Jane Smith',
-          time: DateTime.now().subtract(const Duration(minutes: 5)),
-          category: 'VIP'),
+        name: 'Jane Smith',
+        time: DateTime.now().subtract(const Duration(minutes: 5)),
+        category: 'VIP',
+      ),
       _CheckInItem(
-          name: 'John Doe',
-          time: DateTime.now().subtract(const Duration(minutes: 8)),
-          category: 'Regular'),
+        name: 'John Doe',
+        time: DateTime.now().subtract(const Duration(minutes: 8)),
+        category: 'Regular',
+      ),
       _CheckInItem(
-          name: 'Alice Johnson',
-          time: DateTime.now().subtract(const Duration(minutes: 12)),
-          category: 'Speaker'),
+        name: 'Alice Johnson',
+        time: DateTime.now().subtract(const Duration(minutes: 12)),
+        category: 'Speaker',
+      ),
       _CheckInItem(
-          name: 'Bob Brown',
-          time: DateTime.now().subtract(const Duration(minutes: 15)),
-          category: 'Regular'),
+        name: 'Bob Brown',
+        time: DateTime.now().subtract(const Duration(minutes: 15)),
+        category: 'Regular',
+      ),
       _CheckInItem(
-          name: 'Carol White',
-          time: DateTime.now().subtract(const Duration(minutes: 20)),
-          category: 'Staff'),
+        name: 'Carol White',
+        time: DateTime.now().subtract(const Duration(minutes: 20)),
+        category: 'Staff',
+      ),
     ];
 
     return SizedBox(
@@ -475,9 +477,8 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
 }
 
 class SimplePieChartPainter extends CustomPainter {
-  final Map<String, int> data;
-
   SimplePieChartPainter(this.data);
+  final Map<String, int> data;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -527,13 +528,12 @@ class SimplePieChartPainter extends CustomPainter {
 }
 
 class _CheckInItem {
-  final String name;
-  final DateTime time;
-  final String category;
-
   _CheckInItem({
     required this.name,
     required this.time,
     required this.category,
   });
+  final String name;
+  final DateTime time;
+  final String category;
 }

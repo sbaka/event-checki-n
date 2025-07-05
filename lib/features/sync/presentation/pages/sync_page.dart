@@ -12,7 +12,7 @@ class SyncPage extends StatefulWidget {
 class _SyncPageState extends State<SyncPage> {
   // This would normally come from a bloc
   bool _isSyncing = false;
-  bool _isConnected = true;
+  final bool _isConnected = true;
   DateTime? _lastSyncTime;
 
   final _syncItems = [
@@ -169,13 +169,13 @@ class _SyncPageState extends State<SyncPage> {
   }
 
   Widget _buildSyncItemCard(_SyncItem item) {
-    final Color statusColor = _getSyncStatusColor(item.status);
-    final IconData statusIcon = _getSyncStatusIcon(item.status);
+    final statusColor = _getSyncStatusColor(item.status);
+    final statusIcon = _getSyncStatusIcon(item.status);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             // Status icon
@@ -303,17 +303,16 @@ class _SyncPageState extends State<SyncPage> {
 }
 
 class _SyncItem {
-  final String name;
-  SyncStatus status;
-  final int count;
-  DateTime? lastSync;
-
   _SyncItem({
     required this.name,
     required this.status,
     required this.count,
     this.lastSync,
   });
+  final String name;
+  SyncStatus status;
+  final int count;
+  DateTime? lastSync;
 }
 
 enum SyncStatus {

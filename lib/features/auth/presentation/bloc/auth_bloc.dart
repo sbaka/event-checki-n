@@ -8,10 +8,6 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final GetCurrentUserUseCase _getCurrentUserUseCase;
-  final LoginUseCase _loginUseCase;
-  final LogoutUseCase _logoutUseCase;
-
   AuthBloc(
     this._getCurrentUserUseCase,
     this._loginUseCase,
@@ -26,6 +22,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     });
   }
+  final GetCurrentUserUseCase _getCurrentUserUseCase;
+  final LoginUseCase _loginUseCase;
+  final LogoutUseCase _logoutUseCase;
 
   Future<void> _checkAuthStatus(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
