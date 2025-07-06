@@ -451,7 +451,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
             return ListTile(
               leading: CircleAvatar(
                 backgroundColor:
-                    _getCategoryColor(checkIn.category).withOpacity(0.2),
+                    _getCategoryColor(checkIn.category).withValues(alpha: 0.2),
                 child: Text(
                   checkIn.name.substring(0, 1),
                   style: TextStyle(

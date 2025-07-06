@@ -31,7 +31,7 @@ class DioClient {
         onRequest: (options, handler) async {
           // Check for internet connectivity
           final connectivityResult = await Connectivity().checkConnectivity();
-          if (connectivityResult == ConnectivityResult.none) {
+          if (connectivityResult.contains(ConnectivityResult.none)) {
             return handler.reject(
               DioException(
                 requestOptions: options,

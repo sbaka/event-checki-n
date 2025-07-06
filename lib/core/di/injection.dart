@@ -17,7 +17,7 @@ Future<void> configureDependencies(String environment) async {
   }
 
   // Initialize generated dependency registrations
-  await getIt.init(environment: environment);
+  getIt.init(environment: environment);
 }
 
 abstract class Env {

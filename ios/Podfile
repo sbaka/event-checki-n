@@ -28,7 +28,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+  # Commented out to fix Flutter/Flutter.h not found. Static linking is fine for Swift pods since CocoaPods 1.9.
+  # use_frameworks!
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
@@ -40,5 +41,15 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+  end
+
+  installer.pods_project.targets.each do |t|
+    # Only native targets (frameworks, libraries, apps) have a resources_build_phase.
+    next unless t.respond_to?(:resources_build_phase) && !t.resources_build_phase.nil?
+
+    t.resources_build_phase.files.each do |f|
+      path = f.file_ref.real_path
+      system("xattr -c \"#{path}\"") if File.exist?(path)
+    end
   end
 end

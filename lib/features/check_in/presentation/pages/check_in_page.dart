@@ -62,11 +62,10 @@ class _CheckInPageState extends State<CheckInPage> {
           state.maybeWhen(
             checkInSuccess: (checkIn, attendee) {
               // Reset scanning after a delay
+              final bloc = context.read<CheckInBloc>();
               Future.delayed(const Duration(seconds: 3), () {
                 if (mounted) {
-                  context.read<CheckInBloc>().add(
-                        const CheckInEvent.resetState(),
-                      );
+                  bloc.add(const CheckInEvent.resetState());
                   setState(() {
                     _lastScannedCode = null;
                   });
@@ -75,11 +74,10 @@ class _CheckInPageState extends State<CheckInPage> {
             },
             checkInFailure: (failure, attendee) {
               // Reset scanning after a delay
+              final bloc = context.read<CheckInBloc>();
               Future.delayed(const Duration(seconds: 3), () {
                 if (mounted) {
-                  context.read<CheckInBloc>().add(
-                        const CheckInEvent.resetState(),
-                      );
+                  bloc.add(const CheckInEvent.resetState());
                   setState(() {
                     _lastScannedCode = null;
                   });
@@ -300,7 +298,8 @@ class ScannerOverlayPainter extends CustomPainter {
     final right = left + scanAreaSize;
     final bottom = top + scanAreaSize;
 
-    final backgroundPaint = Paint()..color = Colors.black.withAlpha(128);
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.5);
 
     // Draw background overlay
     canvas

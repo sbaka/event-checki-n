@@ -296,7 +296,7 @@ class _AttendeeImportPageState extends State<AttendeeImportPage> {
                   Text('Successfully imported ${attendees.length} attendees'),
             ),
           );
-          context.router.pop(attendees.length);
+          context.router.maybePop(attendees.length);
         },
       );
     } catch (e) {

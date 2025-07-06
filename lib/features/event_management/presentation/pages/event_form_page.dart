@@ -176,6 +176,9 @@ class _EventFormPageState extends State<EventFormPage> {
 
     setState(() => _isLoading = true);
 
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final router = context.router;
+
     try {
       final event = Event(
         id: widget.event?.id ?? '',
@@ -197,29 +200,35 @@ class _EventFormPageState extends State<EventFormPage> {
       final createEventUseCase = getIt<CreateEventUseCase>();
       final result = await createEventUseCase(event);
 
-      result.fold(
-        (failure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${failure.message}')),
-          );
-        },
-        (createdEvent) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Event ${widget.event == null ? 'created' : 'updated'} successfully',
+      if (mounted) {
+        result.fold(
+          (failure) {
+            scaffoldMessenger.showSnackBar(
+              SnackBar(content: Text('Error: ${failure.message}')),
+            );
+          },
+          (createdEvent) {
+            scaffoldMessenger.showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Event ${widget.event == null ? 'created' : 'updated'} successfully',
+                ),
               ),
-            ),
-          );
-          context.router.pop();
-        },
-      );
+            );
+            router.maybePop();
+          },
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      if (mounted) {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

@@ -10,14 +10,18 @@ import 'package:event_check_in/features/analytics/domain/repositories/analytics_
 @Injectable(as: AnalyticsRepository)
 class AnalyticsRepositoryImpl implements AnalyticsRepository {
   AnalyticsRepositoryImpl(
-      this._database, this._eventRepository, this._attendeeRepository);
+    this._database,
+    this._eventRepository,
+    this._attendeeRepository,
+  );
   final AppDatabase _database;
   final EventRepository _eventRepository;
   final AttendeeRepository _attendeeRepository;
 
   @override
   Future<Either<Failure, EventAnalytics>> getEventAnalytics(
-      String eventId) async {
+    String eventId,
+  ) async {
     try {
       // Get event details
       final eventResult = await _eventRepository.getEventById(eventId);
@@ -67,7 +71,10 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
 
   @override
   Future<Either<Failure, Map<String, int>>> getCheckInsByTimeRange(
-      String eventId, DateTime start, DateTime end) async {
+    String eventId,
+    DateTime start,
+    DateTime end,
+  ) async {
     try {
       // This would require more complex database queries
       // For now, return simplified data
@@ -94,7 +101,8 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
 
   @override
   Future<Either<Failure, List<Map<String, dynamic>>>> getTopCheckInHours(
-      String eventId) async {
+    String eventId,
+  ) async {
     try {
       final checkIns = await _database.getCheckInsByEvent(eventId);
 
