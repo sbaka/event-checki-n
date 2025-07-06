@@ -24,7 +24,7 @@ class EventApiService {
     if (status != null) queryParameters['status'] = status.name;
 
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/events/',
+      '/events',
       queryParameters: queryParameters,
     );
 
@@ -34,7 +34,7 @@ class EventApiService {
   /// Get event by ID
   Future<EventResponse> getEvent(String eventId) async {
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/events/$eventId',
+      '/events/$eventId',
     );
 
     return EventResponse.fromJson(response.data!);
@@ -43,7 +43,7 @@ class EventApiService {
   /// Create a new event
   Future<EventResponse> createEvent(EventCreateRequest request) async {
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/events/',
+      '/events',
       data: request.toJson(),
     );
 
@@ -56,7 +56,7 @@ class EventApiService {
     EventCreateRequest request,
   ) async {
     final response = await _dioClient.put<Map<String, dynamic>>(
-      '/api/events/$eventId',
+      '/events/$eventId',
       data: request.toJson(),
     );
 
@@ -66,7 +66,7 @@ class EventApiService {
   /// Delete an event
   Future<MessageResponse> deleteEvent(String eventId) async {
     final response = await _dioClient.delete<Map<String, dynamic>>(
-      '/api/events/$eventId',
+      '/events/$eventId',
     );
 
     return MessageResponse.fromJson(response.data!);
@@ -78,7 +78,7 @@ class EventApiService {
     EventStatus newStatus,
   ) async {
     final response = await _dioClient.patch<Map<String, dynamic>>(
-      '/api/events/$eventId/status',
+      '/events/$eventId/status',
       data: {'new_status': newStatus.name},
     );
 
@@ -91,7 +91,7 @@ class EventApiService {
     String newName,
   ) async {
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/events/$eventId/duplicate',
+      '/events/$eventId/duplicate',
       data: {'new_name': newName},
     );
 

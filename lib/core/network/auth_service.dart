@@ -16,18 +16,18 @@ class AuthService {
     required String password,
   }) async {
     final request = LoginRequest(email: email, password: password);
-    
+
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/auth/login',
+      '/auth/login',
       data: request.toJson(),
     );
 
     final loginResponse = LoginResponse.fromJson(response.data!);
-    
+
     // Store tokens securely
     await _secureStorage.saveAccessToken(loginResponse.accessToken);
     await _secureStorage.saveRefreshToken(loginResponse.refreshToken);
-    
+
     return loginResponse;
   }
 
@@ -39,25 +39,25 @@ class AuthService {
     }
 
     final request = RefreshTokenRequest(refreshToken: refreshToken);
-    
+
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/auth/refresh',
+      '/auth/refresh',
       data: request.toJson(),
     );
 
     final refreshResponse = RefreshTokenResponse.fromJson(response.data!);
-    
+
     // Store new tokens
     await _secureStorage.saveAccessToken(refreshResponse.accessToken);
     await _secureStorage.saveRefreshToken(refreshResponse.refreshToken);
-    
+
     return refreshResponse;
   }
 
   /// Get current user info
   Future<UserResponse> getCurrentUser() async {
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/auth/me',
+      '/auth/me',
     );
 
     return UserResponse.fromJson(response.data!);
@@ -66,11 +66,11 @@ class AuthService {
   /// Logout user
   Future<void> logout() async {
     try {
-      await _dioClient.post('/api/auth/logout');
+      await _dioClient.post('/auth/logout');
     } catch (e) {
       // Continue with logout even if API call fails
     }
-    
+
     // Clear stored tokens
     await _secureStorage.clearAuthData();
   }

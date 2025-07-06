@@ -25,6 +25,8 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart'
 import '../../features/auth/data/repositories/auth_repository_impl.dart'
     as _i153;
 import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
+import '../../features/auth/domain/usecases/check_auth_status_usecase.dart'
+    as _i52;
 import '../../features/auth/domain/usecases/get_current_user_usecase.dart'
     as _i17;
 import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
@@ -123,8 +125,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i433.EventRemoteDataSource(gh<_i255.EventApiService>()));
     gh.factory<_i196.ImportAttendeesUseCase>(
         () => _i196.ImportAttendeesUseCase(gh<_i483.AttendeeRepository>()));
-    gh.factory<_i107.AuthRemoteDataSource>(
-        () => _i107.AuthRemoteDataSourceImpl(gh<_i667.DioClient>()));
+    gh.factory<_i107.AuthRemoteDataSource>(() => _i107.AuthRemoteDataSourceImpl(
+          gh<_i667.DioClient>(),
+          gh<_i852.AuthLocalDataSource>(),
+        ));
     gh.factory<_i470.EventRepository>(() => _i371.EventRepositoryImpl(
           gh<_i660.AppDatabase>(),
           gh<_i706.Uuid>(),
@@ -156,6 +160,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i48.LogoutUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i17.GetCurrentUserUseCase>(
         () => _i17.GetCurrentUserUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i52.CheckAuthStatusUseCase>(
+        () => _i52.CheckAuthStatusUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i360.GetEventsUseCase>(
         () => _i360.GetEventsUseCase(gh<_i470.EventRepository>()));
     gh.factory<_i219.UpdateEventUseCase>(
@@ -179,7 +185,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i949.DeleteEventUseCase>(),
         ));
     gh.factory<_i797.AuthBloc>(() => _i797.AuthBloc(
-          gh<_i17.GetCurrentUserUseCase>(),
+          gh<_i52.CheckAuthStatusUseCase>(),
           gh<_i188.LoginUseCase>(),
           gh<_i48.LogoutUseCase>(),
         ));

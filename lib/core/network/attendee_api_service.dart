@@ -25,7 +25,7 @@ class AttendeeApiService {
     if (search != null && search.isNotEmpty) queryParameters['search'] = search;
 
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/attendees/event/$eventId',
+      '/attendees/event/$eventId',
       queryParameters: queryParameters,
     );
 
@@ -35,7 +35,7 @@ class AttendeeApiService {
   /// Get attendee by ID
   Future<AttendeeResponse> getAttendee(String attendeeId) async {
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId',
+      '/attendees/$attendeeId',
     );
 
     return AttendeeResponse.fromJson(response.data!);
@@ -62,7 +62,7 @@ class AttendeeApiService {
     };
 
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/attendees/register',
+      '/attendees/register',
       data: request,
     );
 
@@ -80,7 +80,7 @@ class AttendeeApiService {
     String? notes,
   }) async {
     final request = <String, dynamic>{};
-    
+
     if (firstName != null) request['first_name'] = firstName;
     if (lastName != null) request['last_name'] = lastName;
     if (email != null) request['email'] = email;
@@ -89,7 +89,7 @@ class AttendeeApiService {
     if (notes != null) request['notes'] = notes;
 
     final response = await _dioClient.put<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId',
+      '/attendees/$attendeeId',
       data: request,
     );
 
@@ -99,7 +99,7 @@ class AttendeeApiService {
   /// Delete attendee
   Future<MessageResponse> deleteAttendee(String attendeeId) async {
     final response = await _dioClient.delete<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId',
+      '/attendees/$attendeeId',
     );
 
     return MessageResponse.fromJson(response.data!);
@@ -117,7 +117,7 @@ class AttendeeApiService {
     };
 
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId/approve',
+      '/attendees/$attendeeId/approve',
       data: request,
     );
 
@@ -136,7 +136,7 @@ class AttendeeApiService {
     };
 
     final response = await _dioClient.patch<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId/status',
+      '/attendees/$attendeeId/status',
       data: request,
     );
 
@@ -146,7 +146,7 @@ class AttendeeApiService {
   /// Get attendee statistics for an event
   Future<AttendeeStatsResponse> getAttendeeStats(String eventId) async {
     final response = await _dioClient.get<Map<String, dynamic>>(
-      '/api/attendees/event/$eventId/stats',
+      '/attendees/event/$eventId/stats',
     );
 
     return AttendeeStatsResponse.fromJson(response.data!);
@@ -155,7 +155,7 @@ class AttendeeApiService {
   /// Generate QR code for attendee
   Future<Map<String, dynamic>> generateQRCode(String attendeeId) async {
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/attendees/$attendeeId/qr-code',
+      '/attendees/$attendeeId/qr-code',
     );
 
     return response.data!;
@@ -166,7 +166,7 @@ class AttendeeApiService {
     final request = QRCodeValidateRequest(qrCode: qrCode);
 
     final response = await _dioClient.post<Map<String, dynamic>>(
-      '/api/attendees/validate-qr',
+      '/attendees/validate-qr',
       data: request.toJson(),
     );
 

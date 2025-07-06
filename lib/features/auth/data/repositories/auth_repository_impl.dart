@@ -115,7 +115,30 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isAuthenticated() async {
     try {
-      return _localDataSource.hasToken();
+      final hasToken = await _localDataSource.hasToken();
+      if (!hasToken) {
+        return false;
+      }
+
+      // If we have a token but no cached user, try to get current user
+      final cachedUser = await _localDataSource.getLastUser();
+      if (cachedUser == null) {
+        // Try to get user from remote to validate token
+        if (await _connectivityService.checkConnection()) {
+          try {
+            await _remoteDataSource.getCurrentUser();
+            return true;
+          } catch (e) {
+            // Token might be invalid, clear it
+            await _localDataSource.clearTokens();
+            return false;
+          }
+        }
+        // If offline and no cached user, assume not authenticated
+        return false;
+      }
+
+      return true;
     } catch (e) {
       return false;
     }

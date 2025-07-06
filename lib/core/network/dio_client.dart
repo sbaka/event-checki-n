@@ -58,17 +58,19 @@ class DioClient {
               final refreshToken = await _secureStorage.getRefreshToken();
               if (refreshToken != null) {
                 // Create a new DioClient instance without auth interceptor for refresh call
-                final refreshDio = Dio(BaseOptions(baseUrl: _appConfig.apiBaseUrl));
-                final refreshResponse = await refreshDio.post('/api/auth/refresh', 
-                  data: {'refresh_token': refreshToken});
-                
+                final refreshDio =
+                    Dio(BaseOptions(baseUrl: _appConfig.apiBaseUrl));
+                final refreshResponse = await refreshDio.post('auth/refresh',
+                    data: {'refresh_token': refreshToken});
+
                 if (refreshResponse.statusCode == 200) {
                   final data = refreshResponse.data as Map<String, dynamic>;
                   await _secureStorage.saveAccessToken(data['access_token']);
                   await _secureStorage.saveRefreshToken(data['refresh_token']);
-                  
+
                   // Retry the original request with new token
-                  error.requestOptions.headers['Authorization'] = 'Bearer ${data['access_token']}';
+                  error.requestOptions.headers['Authorization'] =
+                      'Bearer ${data['access_token']}';
                   return handler.resolve(await _retry(error.requestOptions));
                 }
               }
@@ -82,7 +84,7 @@ class DioClient {
       ),
     );
   }
-  
+
   late final Dio _dio;
   final AppConfig _appConfig;
   final SecureStorage _secureStorage;

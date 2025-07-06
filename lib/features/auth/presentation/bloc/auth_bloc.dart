@@ -1,4 +1,4 @@
-import 'package:event_check_in/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:event_check_in/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:event_check_in/features/auth/domain/usecases/login_usecase.dart';
 import 'package:event_check_in/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_event.dart';
@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(
-    this._getCurrentUserUseCase,
+    this._checkAuthStatusUseCase,
     this._loginUseCase,
     this._logoutUseCase,
   ) : super(const AuthState.initial()) {
@@ -22,16 +22,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     });
   }
-  final GetCurrentUserUseCase _getCurrentUserUseCase;
+  final CheckAuthStatusUseCase _checkAuthStatusUseCase;
   final LoginUseCase _loginUseCase;
   final LogoutUseCase _logoutUseCase;
 
   Future<void> _checkAuthStatus(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
-    final result = await _getCurrentUserUseCase();
+    final result = await _checkAuthStatusUseCase();
     result.fold(
       (failure) => emit(const AuthState.unauthenticated()),
-      (user) => emit(AuthState.authenticated(user)),
+      (user) {
+        if (user != null) {
+          emit(AuthState.authenticated(user));
+        } else {
+          emit(const AuthState.unauthenticated());
+        }
+      },
     );
   }
 

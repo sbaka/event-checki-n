@@ -1,6 +1,7 @@
 import 'package:event_check_in/core/errors/exceptions.dart';
 import 'package:event_check_in/core/network/dio_client.dart';
 import 'package:event_check_in/features/auth/data/models/user_model.dart';
+import 'package:event_check_in/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class AuthRemoteDataSource {
@@ -28,8 +29,9 @@ abstract class AuthRemoteDataSource {
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImpl(this._dioClient);
+  AuthRemoteDataSourceImpl(this._dioClient, this._localDataSource);
   final DioClient _dioClient;
+  final AuthLocalDataSource _localDataSource;
 
   @override
   Future<UserModel> login({
@@ -55,8 +57,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final refreshToken = data['refresh_token'] as String;
 
       // Save tokens using secure storage
-      // await _secureStorage.saveAccessToken(_accessToken);
-      // await _secureStorage.saveRefreshToken(_refreshToken);
+      await _localDataSource.saveToken(accessToken);
+      await _localDataSource.saveRefreshToken(refreshToken);
 
       // Extract user data
       final userData = data['user'] as Map<String, dynamic>;
@@ -74,7 +76,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       // Clear tokens
-      // await _secureStorage.clearAuthData();
+      await _localDataSource.clearTokens();
     } catch (e) {
       rethrow;
     }
@@ -102,16 +104,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<bool> refreshToken() async {
     try {
       // Get refresh token
-      // final refreshToken = await _secureStorage.getRefreshToken();
-      // if (refreshToken == null) {
-      //   throw ServerException(message: 'No refresh token found');
-      // }
+      final refreshToken = await _localDataSource.getRefreshToken();
+      if (refreshToken == null) {
+        throw ServerException(message: 'No refresh token found');
+      }
 
       final response = await _dioClient.post<Map<String, dynamic>>(
         '/auth/refresh',
-        // data: {
-        //   'refresh_token': refreshToken,
-        // },
+        data: {
+          'refresh_token': refreshToken,
+        },
       );
 
       final data = response.data;
@@ -124,8 +126,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final newRefreshToken = data['refresh_token'] as String;
 
       // Save new tokens
-      // await _secureStorage.saveAccessToken(_accessToken);
-      // await _secureStorage.saveRefreshToken(_newRefreshToken);
+      await _localDataSource.saveToken(accessToken);
+      await _localDataSource.saveRefreshToken(newRefreshToken);
 
       return true;
     } catch (e) {
