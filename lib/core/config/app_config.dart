@@ -22,7 +22,7 @@ class AppConfig {
       );
 
   factory AppConfig.development() => AppConfig(
-        apiBaseUrl: 'https://dev-api.eventcheckin.com/v1',
+        apiBaseUrl: 'http://localhost:8000/api',
         enableLogging: true,
         connectionTimeout: 30000,
         receiveTimeout: 30000,

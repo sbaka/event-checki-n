@@ -4,18 +4,40 @@ import 'package:uuid/uuid.dart';
 import 'package:drift/drift.dart';
 import 'package:event_check_in/core/errors/failures.dart';
 import 'package:event_check_in/core/database/database.dart';
+import 'package:event_check_in/core/network/connectivity_service.dart';
 import 'package:event_check_in/features/event_management/domain/entities/event.dart';
 import 'package:event_check_in/features/event_management/domain/repositories/event_repository.dart';
+import 'package:event_check_in/features/event_management/data/datasources/event_remote_data_source.dart';
 
 @Injectable(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
-  EventRepositoryImpl(this._database, this._uuid);
+  EventRepositoryImpl(
+    this._database,
+    this._uuid,
+    this._remoteDataSource,
+    this._connectivityService,
+  );
   final AppDatabase _database;
   final Uuid _uuid;
+  final EventRemoteDataSource _remoteDataSource;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, List<Event>>> getAllEvents() async {
     try {
+      // Try to fetch from remote first if connected
+      if (await _isConnected()) {
+        try {
+          final remoteEvents = await _remoteDataSource.getAllEvents();
+          // Cache events locally
+          await _cacheEvents(remoteEvents);
+          return Right(remoteEvents);
+        } catch (e) {
+          // Fall back to local data if remote fails
+        }
+      }
+      
+      // Get from local database
       final events = await _database.getAllEvents();
       return Right(events.map(_mapToEntity).toList());
     } catch (e) {
@@ -45,6 +67,19 @@ class EventRepositoryImpl implements EventRepository {
         updatedAt: DateTime.now(),
       );
 
+      // Try to create on remote first if connected
+      if (await _isConnected()) {
+        try {
+          final remoteEvent = await _remoteDataSource.createEvent(eventToCreate);
+          // Cache the created event locally
+          await _cacheEvent(remoteEvent);
+          return Right(remoteEvent);
+        } catch (e) {
+          // Fall back to local creation if remote fails
+        }
+      }
+
+      // Create locally
       final companion = _mapToCompanion(eventToCreate);
       await _database.insertEvent(companion);
 
@@ -61,6 +96,19 @@ class EventRepositoryImpl implements EventRepository {
         updatedAt: DateTime.now(),
       );
 
+      // Try to update on remote first if connected
+      if (await _isConnected()) {
+        try {
+          final remoteEvent = await _remoteDataSource.updateEvent(eventToUpdate);
+          // Update the cache
+          await _cacheEvent(remoteEvent);
+          return Right(remoteEvent);
+        } catch (e) {
+          // Fall back to local update if remote fails
+        }
+      }
+
+      // Update locally
       final companion = _mapToCompanion(eventToUpdate);
       await _database.updateEvent(companion);
 
@@ -73,6 +121,19 @@ class EventRepositoryImpl implements EventRepository {
   @override
   Future<Either<Failure, void>> deleteEvent(String id) async {
     try {
+      // Try to delete on remote first if connected
+      if (await _isConnected()) {
+        try {
+          await _remoteDataSource.deleteEvent(id);
+          // Delete from local cache
+          await _database.deleteEvent(id);
+          return const Right(null);
+        } catch (e) {
+          // Fall back to local delete if remote fails
+        }
+      }
+
+      // Delete locally
       await _database.deleteEvent(id);
       return const Right(null);
     } catch (e) {
@@ -102,6 +163,19 @@ class EventRepositoryImpl implements EventRepository {
     EventStatus status,
   ) async {
     try {
+      // Try to fetch from remote first if connected
+      if (await _isConnected()) {
+        try {
+          final remoteEvents = await _remoteDataSource.getEventsByStatus(status);
+          // Cache events locally
+          await _cacheEvents(remoteEvents);
+          return Right(remoteEvents);
+        } catch (e) {
+          // Fall back to local data if remote fails
+        }
+      }
+      
+      // Get from local database and filter
       final events = await _database.getAllEvents();
       final filtered =
           events.where((event) => event.status == status.toString()).toList();
@@ -171,6 +245,31 @@ class EventRepositoryImpl implements EventRepository {
         return const EventStatus.cancelled();
       default:
         return const EventStatus.draft();
+    }
+  }
+
+  Future<bool> _isConnected() async {
+    return await _connectivityService.checkConnection();
+  }
+
+  Future<void> _cacheEvents(List<Event> events) async {
+    for (final event in events) {
+      await _cacheEvent(event);
+    }
+  }
+
+  Future<void> _cacheEvent(Event event) async {
+    try {
+      final companion = _mapToCompanion(event);
+      await _database.insertEvent(companion);
+    } catch (e) {
+      // If insert fails due to existing ID, try update
+      try {
+        final companion = _mapToCompanion(event);
+        await _database.updateEvent(companion);
+      } catch (e) {
+        // Ignore cache errors
+      }
     }
   }
 }

@@ -4,11 +4,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:event_check_in/core/config/app_config.dart';
 import 'package:event_check_in/core/errors/exceptions.dart';
+import 'package:event_check_in/core/storage/secure_storage.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
 class DioClient {
-  DioClient(this._appConfig) {
+  DioClient(this._appConfig, this._secureStorage) {
     _dio = Dio(
       BaseOptions(
         baseUrl: _appConfig.apiBaseUrl,
@@ -42,30 +43,49 @@ class DioClient {
           }
 
           // Add auth token if available
-          // final token = await _secureStorage.getToken();
-          // if (token != null) {
-          //   options.headers['Authorization'] = 'Bearer $token';
-          // }
+          final token = await _secureStorage.getAccessToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
 
           return handler.next(options);
         },
         onError: (error, handler) async {
           // Handle token refresh if needed
           if (error.response?.statusCode == 401) {
-            // Try to refresh token and retry
-            // if (await _authService.refreshToken()) {
-            //   // Retry the request
-            //   return handler.resolve(await _retry(error.requestOptions));
-            // }
+            try {
+              // Try to refresh token and retry
+              final refreshToken = await _secureStorage.getRefreshToken();
+              if (refreshToken != null) {
+                // Create a new DioClient instance without auth interceptor for refresh call
+                final refreshDio = Dio(BaseOptions(baseUrl: _appConfig.apiBaseUrl));
+                final refreshResponse = await refreshDio.post('/api/auth/refresh', 
+                  data: {'refresh_token': refreshToken});
+                
+                if (refreshResponse.statusCode == 200) {
+                  final data = refreshResponse.data as Map<String, dynamic>;
+                  await _secureStorage.saveAccessToken(data['access_token']);
+                  await _secureStorage.saveRefreshToken(data['refresh_token']);
+                  
+                  // Retry the original request with new token
+                  error.requestOptions.headers['Authorization'] = 'Bearer ${data['access_token']}';
+                  return handler.resolve(await _retry(error.requestOptions));
+                }
+              }
+            } catch (e) {
+              // Refresh failed, clear tokens
+              await _secureStorage.clearAuthData();
+            }
           }
           return handler.next(error);
         },
       ),
     );
   }
-  // final ConnectivityService _connectivityService;
+  
   late final Dio _dio;
   final AppConfig _appConfig;
+  final SecureStorage _secureStorage;
 
   Future<Response<T>> get<T>(
     String path, {
@@ -255,16 +275,16 @@ class DioClient {
     }
   }
 
-  // Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-  //   final options = Options(
-  //     method: requestOptions.method,
-  //     headers: requestOptions.headers,
-  //   );
-  //   return _dio.request<dynamic>(
-  //     requestOptions.path,
-  //     data: requestOptions.data,
-  //     queryParameters: requestOptions.queryParameters,
-  //     options: options,
-  //   );
-  // }
+  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+    final options = Options(
+      method: requestOptions.method,
+      headers: requestOptions.headers,
+    );
+    return _dio.request<dynamic>(
+      requestOptions.path,
+      data: requestOptions.data,
+      queryParameters: requestOptions.queryParameters,
+      options: options,
+    );
+  }
 }

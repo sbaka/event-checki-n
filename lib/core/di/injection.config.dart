@@ -43,6 +43,8 @@ import '../../features/event_management/data/datasources/attendee_local_data_sou
     as _i82;
 import '../../features/event_management/data/datasources/event_local_data_source.dart'
     as _i939;
+import '../../features/event_management/data/datasources/event_remote_data_source.dart'
+    as _i433;
 import '../../features/event_management/data/repositories/attendee_repository_impl.dart'
     as _i706;
 import '../../features/event_management/data/repositories/event_repository_impl.dart'
@@ -65,8 +67,11 @@ import '../../features/event_management/presentation/bloc/event_bloc.dart'
     as _i84;
 import '../config/app_config.dart' as _i650;
 import '../database/database.dart' as _i660;
+import '../network/attendee_api_service.dart' as _i697;
+import '../network/auth_service.dart' as _i103;
 import '../network/connectivity_service.dart' as _i491;
 import '../network/dio_client.dart' as _i667;
+import '../network/event_api_service.dart' as _i255;
 import '../routes/app_router.dart' as _i629;
 import '../storage/hive_storage.dart' as _i799;
 import '../storage/secure_storage.dart' as _i619;
@@ -92,13 +97,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i706.Uuid>(() => injectableModule.uuid);
     gh.factory<_i650.AppConfig>(
         () => _i650.AppConfig.fromEnvironment(gh<String>()));
-    gh.factory<_i470.EventRepository>(() => _i371.EventRepositoryImpl(
-          gh<_i660.AppDatabase>(),
-          gh<_i706.Uuid>(),
-        ));
     gh.factory<_i852.AuthLocalDataSource>(
         () => _i852.AuthLocalDataSourceImpl(gh<_i619.SecureStorage>()));
-    gh.singleton<_i667.DioClient>(() => _i667.DioClient(gh<_i650.AppConfig>()));
+    gh.singleton<_i667.DioClient>(() => _i667.DioClient(
+          gh<_i650.AppConfig>(),
+          gh<_i619.SecureStorage>(),
+        ));
+    gh.singleton<_i103.AuthService>(() => _i103.AuthService(
+          gh<_i667.DioClient>(),
+          gh<_i619.SecureStorage>(),
+        ));
     gh.factory<_i82.AttendeeLocalDataSource>(
         () => _i82.AttendeeLocalDataSourceImpl(gh<_i660.AppDatabase>()));
     gh.factory<_i483.AttendeeRepository>(() => _i706.AttendeeRepositoryImpl(
@@ -107,23 +115,21 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i939.EventLocalDataSource>(
         () => _i939.EventLocalDataSourceImpl(gh<_i660.AppDatabase>()));
-    gh.factory<_i360.GetEventsUseCase>(
-        () => _i360.GetEventsUseCase(gh<_i470.EventRepository>()));
-    gh.factory<_i219.UpdateEventUseCase>(
-        () => _i219.UpdateEventUseCase(gh<_i470.EventRepository>()));
-    gh.factory<_i949.DeleteEventUseCase>(
-        () => _i949.DeleteEventUseCase(gh<_i470.EventRepository>()));
-    gh.factory<_i385.CreateEventUseCase>(
-        () => _i385.CreateEventUseCase(gh<_i470.EventRepository>()));
+    gh.singleton<_i697.AttendeeApiService>(
+        () => _i697.AttendeeApiService(gh<_i667.DioClient>()));
+    gh.singleton<_i255.EventApiService>(
+        () => _i255.EventApiService(gh<_i667.DioClient>()));
+    gh.factory<_i433.EventRemoteDataSource>(
+        () => _i433.EventRemoteDataSource(gh<_i255.EventApiService>()));
     gh.factory<_i196.ImportAttendeesUseCase>(
         () => _i196.ImportAttendeesUseCase(gh<_i483.AttendeeRepository>()));
     gh.factory<_i107.AuthRemoteDataSource>(
         () => _i107.AuthRemoteDataSourceImpl(gh<_i667.DioClient>()));
-    gh.factory<_i84.EventBloc>(() => _i84.EventBloc(
-          gh<_i385.CreateEventUseCase>(),
-          gh<_i360.GetEventsUseCase>(),
-          gh<_i219.UpdateEventUseCase>(),
-          gh<_i949.DeleteEventUseCase>(),
+    gh.factory<_i470.EventRepository>(() => _i371.EventRepositoryImpl(
+          gh<_i660.AppDatabase>(),
+          gh<_i706.Uuid>(),
+          gh<_i433.EventRemoteDataSource>(),
+          gh<_i491.ConnectivityService>(),
         ));
     gh.factory<_i181.CheckInRepository>(() => _i414.CheckInRepositoryImpl(
           gh<_i660.AppDatabase>(),
@@ -150,6 +156,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i48.LogoutUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i17.GetCurrentUserUseCase>(
         () => _i17.GetCurrentUserUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i360.GetEventsUseCase>(
+        () => _i360.GetEventsUseCase(gh<_i470.EventRepository>()));
+    gh.factory<_i219.UpdateEventUseCase>(
+        () => _i219.UpdateEventUseCase(gh<_i470.EventRepository>()));
+    gh.factory<_i949.DeleteEventUseCase>(
+        () => _i949.DeleteEventUseCase(gh<_i470.EventRepository>()));
+    gh.factory<_i385.CreateEventUseCase>(
+        () => _i385.CreateEventUseCase(gh<_i470.EventRepository>()));
     gh.factory<_i675.GetEventAnalyticsUseCase>(
         () => _i675.GetEventAnalyticsUseCase(gh<_i1044.AnalyticsRepository>()));
     gh.factory<_i500.CheckInBloc>(() => _i500.CheckInBloc(
@@ -157,6 +171,12 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i769.ValidateQrCodeUseCase>(),
           gh<_i181.CheckInRepository>(),
           gh<_i483.AttendeeRepository>(),
+        ));
+    gh.factory<_i84.EventBloc>(() => _i84.EventBloc(
+          gh<_i385.CreateEventUseCase>(),
+          gh<_i360.GetEventsUseCase>(),
+          gh<_i219.UpdateEventUseCase>(),
+          gh<_i949.DeleteEventUseCase>(),
         ));
     gh.factory<_i797.AuthBloc>(() => _i797.AuthBloc(
           gh<_i17.GetCurrentUserUseCase>(),

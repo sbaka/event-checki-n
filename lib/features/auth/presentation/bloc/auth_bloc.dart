@@ -13,8 +13,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._loginUseCase,
     this._logoutUseCase,
   ) : super(const AuthState.initial()) {
-    on<AuthEvent>((event, emit) {
-      event.map(
+    on<AuthEvent>((event, emit) async {
+      await event.map(
         checkAuthStatus: (_) => _checkAuthStatus(emit),
         login: (e) => _login(e.email, e.password, emit),
         logout: (_) => _logout(emit),

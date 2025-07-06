@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:event_check_in/core/di/injection.dart';
+import 'package:event_check_in/core/routes/app_router.gr.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_event.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_state.dart';
@@ -21,15 +22,15 @@ class SplashPage extends StatelessWidget {
             state.maybeWhen(
               authenticated: (user) {
                 // Navigate to dashboard
-                // context.router.replace(const DashboardRoute());
+                context.router.replaceAll([const DashboardRoute()]);
               },
               unauthenticated: () {
                 // Navigate to login
-                // context.router.replace(const LoginRoute());
+                context.router.replaceAll([const LoginRoute()]);
               },
               error: (message) {
                 // Navigate to login
-                // context.router.replace(const LoginRoute());
+                context.router.replaceAll([const LoginRoute()]);
               },
               orElse: () {},
             );

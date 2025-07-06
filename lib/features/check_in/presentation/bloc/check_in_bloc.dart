@@ -29,17 +29,17 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
     CheckInEvent event,
     Emitter<CheckInState> emit,
   ) async {
-    event.when(
-      scanQrCode: (qrCode, eventId) => _onScanQrCode(qrCode, eventId, emit),
-      checkInAttendee: (attendeeId, eventId, method) =>
-          _onCheckInAttendee(attendeeId, eventId, method, emit),
-      loadCheckIns: (eventId) => _onLoadCheckIns(eventId, emit),
-      validateQrCode: (qrCode) => _onValidateQrCode(qrCode, emit),
-      resetState: () => _onResetState(emit),
-      searchAttendee: (query, eventId) =>
-          _onSearchAttendee(query, eventId, emit),
-      startScanning: () => _onStartScanning(emit),
-      stopScanning: () => _onStopScanning(emit),
+    await event.when(
+      scanQrCode: (qrCode, eventId) async => await _onScanQrCode(qrCode, eventId, emit),
+      checkInAttendee: (attendeeId, eventId, method) async =>
+          await _onCheckInAttendee(attendeeId, eventId, method, emit),
+      loadCheckIns: (eventId) async => await _onLoadCheckIns(eventId, emit),
+      validateQrCode: (qrCode) async => await _onValidateQrCode(qrCode, emit),
+      resetState: () async => _onResetState(emit),
+      searchAttendee: (query, eventId) async =>
+          await _onSearchAttendee(query, eventId, emit),
+      startScanning: () async => _onStartScanning(emit),
+      stopScanning: () async => _onStopScanning(emit),
     );
   }
 
@@ -76,14 +76,14 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
           const CheckInMethod.qrCode(),
         );
 
-        checkInResult.fold(
-          (failure) => emit(
+        await checkInResult.fold(
+          (failure) async => emit(
             CheckInState.checkInFailure(
               failure,
               attendee: attendee,
             ),
           ),
-          (checkIn) => emit(CheckInState.checkInSuccess(checkIn, attendee)),
+          (checkIn) async => emit(CheckInState.checkInSuccess(checkIn, attendee)),
         );
       },
     );
@@ -103,16 +103,16 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
       method,
     );
 
-    result.fold(
-      (failure) => emit(CheckInState.checkInFailure(failure)),
+    await result.fold(
+      (failure) async => emit(CheckInState.checkInFailure(failure)),
       (checkIn) async {
         // Get attendee details for the success state
         final attendeeResult = await _attendeeRepository.getAttendeeById(
           attendeeId,
         );
-        attendeeResult.fold(
-          (failure) => emit(CheckInState.checkInFailure(failure)),
-          (attendee) => emit(CheckInState.checkInSuccess(checkIn, attendee)),
+        await attendeeResult.fold(
+          (failure) async => emit(CheckInState.checkInFailure(failure)),
+          (attendee) async => emit(CheckInState.checkInSuccess(checkIn, attendee)),
         );
       },
     );
@@ -124,9 +124,9 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
   ) async {
     final result = await _checkInRepository.getCheckInsByEvent(eventId);
 
-    result.fold(
-      (failure) => emit(CheckInState.error(failure)),
-      (checkIns) => emit(CheckInState.checkInsLoaded(checkIns)),
+    await result.fold(
+      (failure) async => emit(CheckInState.error(failure)),
+      (checkIns) async => emit(CheckInState.checkInsLoaded(checkIns)),
     );
   }
 
@@ -138,9 +138,9 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
 
     final result = await _validateQrCodeUseCase(qrCode);
 
-    result.fold(
-      (failure) => emit(CheckInState.checkInFailure(failure)),
-      (attendee) {
+    await result.fold(
+      (failure) async => emit(CheckInState.checkInFailure(failure)),
+      (attendee) async {
         if (attendee != null) {
           emit(CheckInState.qrValidated(attendee));
         } else {
@@ -166,9 +166,9 @@ class CheckInBloc extends Bloc<CheckInEvent, CheckInState> {
 
     final result = await _attendeeRepository.getAttendeesByEvent(eventId);
 
-    result.fold(
-      (failure) => emit(CheckInState.error(failure)),
-      (attendees) {
+    await result.fold(
+      (failure) async => emit(CheckInState.error(failure)),
+      (attendees) async {
         final filteredAttendees = attendees.where((attendee) {
           final fullName =
               '${attendee.firstName} ${attendee.lastName}'.toLowerCase();

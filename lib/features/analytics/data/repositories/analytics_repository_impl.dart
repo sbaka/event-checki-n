@@ -51,6 +51,10 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
       // Get check-ins by ticket type
       final checkInsByTicketType = await _getCheckInsByTicketType(eventId);
 
+      // Ensure we have default values if data is empty
+      final safeCheckInsByHour = checkInsByHour.isEmpty ? {'00:00': 0} : checkInsByHour;
+      final safeCheckInsByTicketType = checkInsByTicketType.isEmpty ? {'Regular': 0} : checkInsByTicketType;
+
       final analytics = EventAnalytics(
         eventId: eventId,
         eventName: event.name,
@@ -58,8 +62,8 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
         checkedInCount: checkedInCount,
         checkInRate: checkInRate,
         noShowCount: totalAttendees - checkedInCount,
-        checkInsByHour: checkInsByHour,
-        checkInsByTicketType: checkInsByTicketType,
+        checkInsByHour: safeCheckInsByHour,
+        checkInsByTicketType: safeCheckInsByTicketType,
         lastUpdated: DateTime.now(),
       );
 

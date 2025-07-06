@@ -11,9 +11,10 @@ class UserModel with _$UserModel {
     required String email,
     required String name,
     required String role,
-    required bool isActive,
-    required DateTime createdAt,
-    String? profileImage,
+    @JsonKey(name: 'is_active') @Default(true) bool isActive,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @JsonKey(name: 'profile_image') String? profileImage,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -27,6 +28,7 @@ class UserModel with _$UserModel {
         role: user.role,
         isActive: user.isActive,
         createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       );
 }
 
@@ -39,5 +41,6 @@ extension UserModelX on UserModel {
         role: role,
         isActive: isActive,
         createdAt: createdAt,
+        updatedAt: updatedAt,
       );
 }

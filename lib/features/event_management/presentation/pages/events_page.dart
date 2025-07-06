@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:event_check_in/core/di/injection.dart';
 import 'package:event_check_in/features/event_management/domain/entities/event.dart';
 import 'package:event_check_in/features/event_management/presentation/bloc/event_bloc.dart';
 import 'package:event_check_in/features/event_management/presentation/bloc/event_event.dart';
@@ -23,10 +22,13 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          getIt<EventBloc>()..add(const EventEvent.loadEvents()),
-      child: _buildContent(),
+    return BlocBuilder<EventBloc, EventState>(
+      builder: (context, state) {
+        if (state == const EventState.initial()) {
+          context.read<EventBloc>().add(const EventEvent.loadEvents());
+        }
+        return _buildContent();
+      },
     );
   }
 

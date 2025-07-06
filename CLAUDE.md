@@ -108,3 +108,48 @@ The app follows Clean Architecture with these layers:
 - Generated files are excluded from analysis (.g.dart, .freezed.dart, .gr.dart)
 - Custom fonts: Poppins font family
 - Material 3 design with custom color scheme
+
+## Error Handling
+
+- Uses `dartz` package for functional error handling with `Either<Failure, Success>`
+- Custom `Failure` classes for domain-specific errors (ServerFailure, CacheFailure, NetworkFailure, ValidationFailure)
+- Proper error mapping between layers
+- User-friendly error messages in the UI
+- Centralized error handling strategies
+
+## Database Schema
+
+The app uses **Drift** (SQLite) with four main tables:
+- **Events**: Event details, dates, settings, organizer info
+- **Attendees**: Attendee information with QR codes and status
+- **CheckIns**: Check-in records with timestamps and metadata
+- **Tickets**: Ticket types and pricing information
+
+Key features:
+- Foreign key relationships between tables
+- Type-safe queries with compile-time checking
+- Batch operations for attendee imports
+- Built-in analytics queries for event statistics
+
+## Special Features
+
+### QR Code Check-In
+- Uses `mobile_scanner` for camera-based QR code scanning
+- Real-time attendee validation
+- Offline support (works without internet)
+- Manual check-in alternative
+
+### Data Import
+- CSV import using `file_picker` for attendee lists
+- Batch processing for efficient bulk operations
+- Data validation during import process
+
+## Code Generation Requirements
+
+Run code generation after modifying:
+- Injectable/DI annotations
+- Freezed models (entities, events, states)
+- JSON serializable models
+- Auto Route definitions
+- Drift database schemas
+- Hive type adapters

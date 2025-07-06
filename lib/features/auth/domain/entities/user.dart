@@ -9,6 +9,7 @@ class User extends Equatable {
     required this.role,
     required this.isActive,
     required this.createdAt,
+    required this.updatedAt,
   });
   final String id;
   final String email;
@@ -17,6 +18,7 @@ class User extends Equatable {
   final String role;
   final bool isActive;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   @override
   List<Object?> get props => [
@@ -27,5 +29,6 @@ class User extends Equatable {
         role,
         isActive,
         createdAt,
+        updatedAt,
       ];
 }

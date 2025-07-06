@@ -8,7 +8,13 @@
       "Bash(flutter analyze:*)",
       "Bash(flutter:*)",
       "Bash(pod install:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:autoroute.vercel.app)",
+      "WebFetch(domain:pub.dev)",
+      "Bash(curl:*)",
+      "Bash(timeout 10s flutter run:*)"
     ],
     "deny": []
   }

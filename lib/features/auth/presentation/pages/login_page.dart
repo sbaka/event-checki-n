@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:event_check_in/core/di/injection.dart';
+import 'package:event_check_in/core/routes/app_router.gr.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_event.dart';
 import 'package:event_check_in/features/auth/presentation/bloc/auth_state.dart';
@@ -38,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
             state.maybeMap(
               authenticated: (_) {
                 // Navigate to dashboard
-                // context.router.replace(const DashboardRoute());
+                context.router.replaceAll([const DashboardRoute()]);
               },
               error: (state) {
                 ScaffoldMessenger.of(context).showSnackBar(

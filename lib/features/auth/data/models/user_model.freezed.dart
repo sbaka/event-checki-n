@@ -24,8 +24,13 @@ mixin _$UserModel {
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_active')
   bool get isActive => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'profile_image')
   String? get profileImage => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
@@ -48,9 +53,10 @@ abstract class $UserModelCopyWith<$Res> {
       String email,
       String name,
       String role,
-      bool isActive,
-      DateTime createdAt,
-      String? profileImage});
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
+      @JsonKey(name: 'profile_image') String? profileImage});
 }
 
 /// @nodoc
@@ -74,6 +80,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? role = null,
     Object? isActive = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
     Object? profileImage = freezed,
   }) {
     return _then(_value.copyWith(
@@ -101,6 +108,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -122,9 +133,10 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String email,
       String name,
       String role,
-      bool isActive,
-      DateTime createdAt,
-      String? profileImage});
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
+      @JsonKey(name: 'profile_image') String? profileImage});
 }
 
 /// @nodoc
@@ -146,6 +158,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? role = null,
     Object? isActive = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
     Object? profileImage = freezed,
   }) {
     return _then(_$UserModelImpl(
@@ -173,6 +186,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -189,9 +206,10 @@ class _$UserModelImpl implements _UserModel {
       required this.email,
       required this.name,
       required this.role,
-      required this.isActive,
-      required this.createdAt,
-      this.profileImage});
+      @JsonKey(name: 'is_active') this.isActive = true,
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'updated_at') required this.updatedAt,
+      @JsonKey(name: 'profile_image') this.profileImage});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -205,15 +223,21 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String role;
   @override
+  @JsonKey(name: 'is_active')
   final bool isActive;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
+  @override
+  @JsonKey(name: 'profile_image')
   final String? profileImage;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, role: $role, isActive: $isActive, createdAt: $createdAt, profileImage: $profileImage)';
+    return 'UserModel(id: $id, email: $email, name: $name, role: $role, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, profileImage: $profileImage)';
   }
 
   @override
@@ -229,14 +253,16 @@ class _$UserModelImpl implements _UserModel {
                 other.isActive == isActive) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, email, name, role, isActive, createdAt, profileImage);
+  int get hashCode => Object.hash(runtimeType, id, email, name, role, isActive,
+      createdAt, updatedAt, profileImage);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -256,13 +282,15 @@ class _$UserModelImpl implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-      {required final String id,
-      required final String email,
-      required final String name,
-      required final String role,
-      required final bool isActive,
-      required final DateTime createdAt,
-      final String? profileImage}) = _$UserModelImpl;
+          {required final String id,
+          required final String email,
+          required final String name,
+          required final String role,
+          @JsonKey(name: 'is_active') final bool isActive,
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+          @JsonKey(name: 'profile_image') final String? profileImage}) =
+      _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -276,10 +304,16 @@ abstract class _UserModel implements UserModel {
   @override
   String get role;
   @override
+  @JsonKey(name: 'is_active')
   bool get isActive;
   @override
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
+  DateTime get updatedAt;
+  @override
+  @JsonKey(name: 'profile_image')
   String? get profileImage;
 
   /// Create a copy of UserModel

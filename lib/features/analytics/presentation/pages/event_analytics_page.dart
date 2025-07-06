@@ -253,7 +253,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
     }
 
     final values = checkInsByHour.values.toList();
-    final maxValue = values.reduce((a, b) => a > b ? a : b).toDouble();
+    final maxValue = values.isEmpty ? 1.0 : values.reduce((a, b) => a > b ? a : b).toDouble();
 
     return SizedBox(
       height: 200,
@@ -331,6 +331,15 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
     // This would normally be a proper pie chart
     // For simplicity, we'll use a basic visualization
 
+    if (categoryData.isEmpty) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('No ticket type data available'),
+        ),
+      );
+    }
+    
     final total = categoryData.values.reduce((a, b) => a + b);
 
     return SizedBox(
@@ -450,8 +459,7 @@ class _EventAnalyticsPageState extends State<EventAnalyticsPage> {
             final checkIn = recentCheckIns[index];
             return ListTile(
               leading: CircleAvatar(
-                backgroundColor:
-                    _getCategoryColor(checkIn.category).withValues(alpha: 0.2),
+                backgroundColor: Colors.grey.withOpacity(0.2),
                 child: Text(
                   checkIn.name.substring(0, 1),
                   style: TextStyle(
@@ -485,6 +493,8 @@ class SimplePieChartPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width < size.height ? size.width / 2 : size.height / 2;
 
+    if (data.isEmpty) return;
+    
     double startAngle = 0;
     final total = data.values.reduce((a, b) => a + b);
 

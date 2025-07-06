@@ -37,9 +37,9 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     
     final result = await _getEventsUseCase();
     
-    result.fold(
-      (failure) => emit(EventState.error(failure.message)),
-      (events) => emit(EventState.loaded(events)),
+    await result.fold(
+      (failure) async => emit(EventState.error(failure.message)),
+      (events) async => emit(EventState.loaded(events)),
     );
   }
 
@@ -48,10 +48,15 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     
     final result = await _createEventUseCase(event);
     
-    result.fold(
-      (failure) => emit(EventState.error(failure.message)),
-      (createdEvent) {
-        add(const EventEvent.loadEvents());
+    await result.fold(
+      (failure) async => emit(EventState.error(failure.message)),
+      (createdEvent) async {
+        // Reload events to show the new event
+        final eventsResult = await _getEventsUseCase();
+        await eventsResult.fold(
+          (failure) async => emit(EventState.error(failure.message)),
+          (events) async => emit(EventState.loaded(events)),
+        );
       },
     );
   }
@@ -61,10 +66,15 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     
     final result = await _updateEventUseCase(event);
     
-    result.fold(
-      (failure) => emit(EventState.error(failure.message)),
-      (updatedEvent) {
-        add(const EventEvent.loadEvents());
+    await result.fold(
+      (failure) async => emit(EventState.error(failure.message)),
+      (updatedEvent) async {
+        // Reload events to show the updated event
+        final eventsResult = await _getEventsUseCase();
+        await eventsResult.fold(
+          (failure) async => emit(EventState.error(failure.message)),
+          (events) async => emit(EventState.loaded(events)),
+        );
       },
     );
   }
@@ -74,10 +84,15 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     
     final result = await _deleteEventUseCase(eventId);
     
-    result.fold(
-      (failure) => emit(EventState.error(failure.message)),
-      (_) {
-        add(const EventEvent.loadEvents());
+    await result.fold(
+      (failure) async => emit(EventState.error(failure.message)),
+      (_) async {
+        // Reload events to show the updated list
+        final eventsResult = await _getEventsUseCase();
+        await eventsResult.fold(
+          (failure) async => emit(EventState.error(failure.message)),
+          (events) async => emit(EventState.loaded(events)),
+        );
       },
     );
   }
